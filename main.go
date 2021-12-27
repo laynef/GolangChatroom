@@ -30,6 +30,8 @@ func main() {
 	// Serve public assets
 	r.Use(static.Serve("/public", static.LocalFile("./public", true)))
 
+	// Return html for all other routes
+	// The browser controls the HTML routing
 	r.NoRoute(func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", nil)
 	})
