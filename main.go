@@ -19,12 +19,12 @@ func main() {
 		c.Next()
 	})
 
-	// Add views for templating
-	r.Use(static.Serve("/", static.LocalFile("./views", true)))
-
 	// Define routes
 	v1 := r.Group("/api/v1")
 	v1.GET("/", controllers.Home)
+
+	// Add views for templating
+	r.Use(static.Serve("/", static.LocalFile("./views", true)))
 
 	r.Run()
 }
