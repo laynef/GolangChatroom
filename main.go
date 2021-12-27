@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/laynefaler/chatroom/controllers"
 	"github.com/laynefaler/chatroom/models"
@@ -17,9 +18,13 @@ func main() {
 		c.Set("db", db)
 		c.Next()
 	})
-	
+
+	// Add views for templating
+	r.Use(static.Serve("/", static.LocalFile("./views", true)))
+
 	// Define routes
-	r.GET("/", controllers.Home)
+	v1 := r.Group("/api/v1")
+	v1.GET("/", controllers.Home)
 
 	r.Run()
 }
