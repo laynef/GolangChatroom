@@ -1,9 +1,10 @@
 package controllers
 
 import (
+	"net/http"
 	"github.com/gin-gonic/gin"
 )
 
 func Home(c *gin.Context) {
-	c.JSON(200, gin.H{"hello": "world"})
+	c.JSON(http.StatusOK, gin.H{"hello": "world"})
 }
