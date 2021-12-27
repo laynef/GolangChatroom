@@ -25,6 +25,7 @@ func main() {
 
 	// Add views for templating
 	r.Use(static.Serve("/", static.LocalFile("./views", true)))
+	r.Use(static.Serve("/public", static.LocalFile("./public", true)))
 
 	r.Run()
 }
