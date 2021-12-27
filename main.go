@@ -1,6 +1,7 @@
 package main
 
 import (
+	"net/http"
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/laynefaler/chatroom/controllers"
@@ -9,6 +10,9 @@ import (
 
 func main() {
 	r := gin.Default()
+
+	// Load views
+	r.LoadHTMLGlob("views/*.html")
 
 	// connect to database
 	db := models.SetupModels()
@@ -23,9 +27,12 @@ func main() {
 	v1 := r.Group("/api/v1")
 	v1.GET("/", controllers.Home)
 
-	// Add views for templating
-	r.Use(static.Serve("/", static.LocalFile("./views", true)))
+	// Serve public assets
 	r.Use(static.Serve("/public", static.LocalFile("./public", true)))
+
+	r.NoRoute(func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", nil)
+	})
 
 	r.Run()
 }
