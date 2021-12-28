@@ -3,11 +3,12 @@ package models
 import (
 	"fmt"
 	"os"
+
+	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"github.com/joho/godotenv"
 )
-  
+
 func SetupModels() *gorm.DB {
 	errors := godotenv.Load()
 	if errors != nil {
@@ -30,6 +31,8 @@ func SetupModels() *gorm.DB {
 	if err != nil {
 		panic("Failed to connect to database!")
 	}
-	
+
+	db.AutoMigrate(&User{})
+
 	return db
 }
