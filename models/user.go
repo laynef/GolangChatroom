@@ -8,6 +8,7 @@ import (
 )
 
 type User struct {
+	gorm.Model
 	ID                   uuid.UUID      `json:"id" gorm:"type:uuid;primaryKey;"`
 	Email                string         `json:"email" validate:"required,email" gorm:"unique"`
 	Username             string         `json:"username" validate:"required,min=2,max=20" gorm:"unique"`
@@ -17,6 +18,7 @@ type User struct {
 	CreatedAt            time.Time      `json:"created_at" gorm:"autoCreateTime"`
 	UpdatedAt            time.Time      `json:"updated_at" gorm:"autoUpdateTime"`
 	DeletedAt            gorm.DeletedAt `json:"deleted_at" gorm:"index"`
+	Threads              []Thread
 }
 
 func (u *User) BeforeCreate(scope *gorm.DB) (err error) {

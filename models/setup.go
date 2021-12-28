@@ -32,7 +32,11 @@ func SetupModels() *gorm.DB {
 		panic("Failed to connect to database!")
 	}
 
-	db.AutoMigrate(&User{})
+	db.AutoMigrate(
+		&User{},
+		&Thread{},
+		&Message{},
+	)
 
 	return db
 }

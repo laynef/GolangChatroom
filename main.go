@@ -42,6 +42,12 @@ func main() {
 	auth := r.Group("/api/v1")
 	auth.Use(middleware.Authorize)
 	auth.DELETE("/auth/logout", controllers.Logout)
+	// Authorized threads
+	auth.GET("/threads", controllers.ListThreads)
+	auth.GET("/threads/{threadId}", controllers.ShowThread)
+	auth.POST("/threads", controllers.CreateThread)
+	auth.PUT("/threads/{threadId}", controllers.UpdateThread)
+	auth.DELETE("/threads/{threadId}", controllers.DestroyThread)
 	// Serve public assets
 	r.Use(static.Serve("/public", static.LocalFile("./public", true)))
 
