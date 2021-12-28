@@ -15,6 +15,10 @@ export const LoginPage = () => {
         password,
     });
 
+    if (login.isSuccess) {
+        window.location.href = "/dashboard";
+    }
+
     return (
         <Layout>
             <>
@@ -24,13 +28,16 @@ export const LoginPage = () => {
                     <form className='card' method='POST' onSubmit={onSubmit} action={null}>
                         <div className='column'>
                             <label>Email</label>
-                            <input onChange={e => setEmail(e.target.value)} type='email' name='email' />
+                            <input value={email} onChange={e => setEmail(e.target.value)} type='email' name='email' />
                         </div>
                         <div className='column'>
                             <label>Password</label>
-                            <input onChange={e => setPassword(e.target.value)} type='password' name='password' />
+                            <input value={password} onChange={e => setPassword(e.target.value)} type='password' name='password' />
                         </div>
                         <input type='submit' value='Login' />
+                        {login.isError ? (
+                            <div className='column'>An error occurred: {login.error.message}</div>
+                        ) : null}
                     </form>
                 </main>
             </>

@@ -1,5 +1,5 @@
-# github.com/dgrijalva/jwt-go v3.2.0+incompatible
-## explicit
+# github.com/BurntSushi/toml v0.4.1
+## explicit; go 1.16
 # github.com/gin-contrib/cors v1.3.1
 ## explicit; go 1.13
 github.com/gin-contrib/cors
@@ -74,7 +74,7 @@ github.com/joho/godotenv
 # github.com/json-iterator/go v1.1.12
 ## explicit; go 1.12
 github.com/json-iterator/go
-# github.com/kr/pretty v0.2.0
+# github.com/kr/pretty v0.3.0
 ## explicit; go 1.12
 # github.com/leodido/go-urn v1.2.0
 ## explicit; go 1.13
@@ -88,9 +88,13 @@ github.com/modern-go/concurrent
 # github.com/modern-go/reflect2 v1.0.2
 ## explicit; go 1.12
 github.com/modern-go/reflect2
+# github.com/ramya-rao-a/go-outline v0.0.0-20210608161538-9736a4bde949
+## explicit; go 1.16
 # github.com/satori/go.uuid v1.2.0
 ## explicit
 github.com/satori/go.uuid
+# github.com/sergi/go-diff v1.2.0
+## explicit; go 1.12
 # github.com/ugorji/go/codec v1.1.7
 ## explicit
 github.com/ugorji/go/codec
@@ -100,6 +104,10 @@ golang.org/x/crypto/bcrypt
 golang.org/x/crypto/blowfish
 golang.org/x/crypto/pbkdf2
 golang.org/x/crypto/sha3
+# golang.org/x/mod v0.5.1
+## explicit; go 1.17
+# golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
+## explicit
 # golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e
 ## explicit; go 1.17
 golang.org/x/sys/cpu
@@ -120,6 +128,12 @@ golang.org/x/text/transform
 golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
 golang.org/x/text/width
+# golang.org/x/tools v0.1.9-0.20211209172050-90a85b2969be
+## explicit; go 1.17
+# golang.org/x/tools/gopls v0.7.4
+## explicit; go 1.18
+# golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
+## explicit; go 1.11
 # google.golang.org/protobuf v1.27.1
 ## explicit; go 1.9
 google.golang.org/protobuf/encoding/prototext
@@ -168,3 +182,9 @@ gorm.io/gorm/logger
 gorm.io/gorm/migrator
 gorm.io/gorm/schema
 gorm.io/gorm/utils
+# honnef.co/go/tools v0.2.2
+## explicit; go 1.14
+# mvdan.cc/gofumpt v0.2.1
+## explicit; go 1.16
+# mvdan.cc/xurls/v2 v2.3.0
+## explicit; go 1.15

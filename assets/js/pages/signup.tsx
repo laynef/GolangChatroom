@@ -19,6 +19,10 @@ export const SignUpPage = () => {
         password_confirmation,
     });
 
+    if (signup.isSuccess) {
+        window.location.href = "/dashboard";
+    }
+
     return (
         <Layout>
             <>
@@ -28,23 +32,23 @@ export const SignUpPage = () => {
                     <form className='card' method='POST' onSubmit={onSubmit} action={null}>
                         <div className='column'>
                             <label>Username</label>
-                            <input onChange={e => setUsername(e.target.value)} type='text' name='username' />
+                            <input value={username} onChange={e => setUsername(e.target.value)} type='text' name='username' />
                         </div>
                         <div className='column'>
                             <label>Email</label>
-                            <input onChange={e => setEmail(e.target.value)} type='email' name='email' />
+                            <input value={email} onChange={e => setEmail(e.target.value)} type='email' name='email' />
                         </div>
                         <div className='column'>
                             <label>Password</label>
-                            <input onChange={e => setPassword(e.target.value)} type='password' name='password' />
+                            <input value={password} onChange={e => setPassword(e.target.value)} type='password' name='password' />
                         </div>
                         <div className='column'>
                             <label>Password Confirmation</label>
-                            <input onChange={e => setPasswordConfirmation(e.target.value)} type='password' name='password_confirmation' />
+                            <input value={password_confirmation} onChange={e => setPasswordConfirmation(e.target.value)} type='password' name='password_confirmation' />
                         </div>
                         <input type='submit' value='Sign Up' />
                         {signup.isError ? (
-                            <div>An error occurred: {signup.error.message}</div>
+                            <div className='column'>An error occurred: {signup.error.message}</div>
                         ) : null}
                     </form>
                 </main>
