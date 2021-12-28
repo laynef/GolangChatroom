@@ -12,7 +12,7 @@ import (
 func Login(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
 
-	db := c.MustGet("db").(gorm.DB)
+	db := c.MustGet("db").(*gorm.DB)
 
 	var body models.User
 	c.BindJSON(&body)
@@ -27,18 +27,22 @@ func Login(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			"message": "user not found",
-			"code":    http.NotFound,
+			"code":    http.StatusNotFound,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"hello": "world"})
+	c.JSON(http.StatusOK, gin.H{
+		"id":         user.ID,
+		"email":      user.Email,
+		"created_at": user.CreatedAt,
+	})
 }
 
 func SignUp(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
 
-	db := c.MustGet("db").(gorm.DB)
+	db := c.MustGet("db").(*gorm.DB)
 
 	var body models.User
 	c.BindJSON(&body)
