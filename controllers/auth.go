@@ -11,6 +11,27 @@ import (
 
 func Login(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
+
+	db := c.MustGet("db").(gorm.DB)
+
+	var body models.User
+	c.BindJSON(&body)
+
+	var user models.User
+	db.First(&user, "email = ?", body.Email)
+	hash := []byte(user.PasswordHash)
+	pass := []byte(body.Password)
+
+	err := bcrypt.CompareHashAndPassword(hash, pass)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"message": "user not found",
+			"code":    http.NotFound,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{"hello": "world"})
 }
 
