@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/laynefaler/chatroom/controllers"
 	"github.com/laynefaler/chatroom/models"
-	"github.com/laynefaler/chatroom/util"
+	"github.com/laynefaler/chatroom/utils"
 )
 
 func main() {
@@ -45,8 +45,8 @@ func main() {
 	// Return html for all other routes
 	// The browser controls the HTML routing
 	r.NoRoute(func(c *gin.Context) {
-		script := util.FindFile(".js")
-		stylesheet := util.FindFile(".css")
+		script := utils.FindFile(".js")
+		stylesheet := utils.FindFile(".css")
 
 		c.HTML(http.StatusOK, "index.html", gin.H{
 			"script":     script,
