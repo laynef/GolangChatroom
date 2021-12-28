@@ -59,7 +59,6 @@ func Login(c *gin.Context) {
 	c.SetCookie("jwt", tokenString, JwtCookieExpiresAt, "/", "localhost", false, false)
 	c.SetCookie("current_user_id", uuidString, JwtCookieExpiresAt, "/", "localhost", false, false)
 	c.JSON(http.StatusOK, gin.H{
-		"token":    tokenString,
 		"username": user.Username,
 		"email":    user.Email,
 	})
@@ -123,7 +122,6 @@ func SignUp(c *gin.Context) {
 	c.SetCookie("jwt", tokenString, JwtCookieExpiresAt, "/", "localhost", false, false)
 	c.SetCookie("current_user_id", uuidString, JwtCookieExpiresAt, "/", "localhost", false, false)
 	c.JSON(http.StatusOK, gin.H{
-		"token":    tokenString,
 		"username": user.Username,
 		"email":    user.Email,
 	})

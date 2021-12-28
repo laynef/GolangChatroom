@@ -16,5 +16,5 @@ export const useLogin = () => useMutation(async (body: RequestBody) => {
     });
     return res.json();
 }, {
-    onSuccess: () => { window.location.href = "/dashboard" },
+    onSuccess: (data) => { if (data.email) window.location.href = "/dashboard" },
 });
