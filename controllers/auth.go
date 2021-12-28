@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt"
 	"github.com/laynefaler/chatroom/models"
 	"github.com/laynefaler/chatroom/utils"
@@ -79,7 +80,19 @@ func SignUp(c *gin.Context) {
 
 	user := models.User{
 		Email:        body.Email,
+		Username:     body.Username,
 		PasswordHash: string(hash),
+	}
+
+	v := validator.New()
+	errors := v.Struct(user)
+
+	if errors != nil {
+		c.JSON(http.StatusPartialContent, gin.H{
+			"message": errors.Error(),
+			"code":    http.StatusPartialContent,
+		})
+		return
 	}
 
 	db.Create(&user)
@@ -119,5 +132,5 @@ func ChangePassword(c *gin.Context) {
 
 func Logout(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
-	c.JSON(http.StatusOK, gin.H{"hello": "world"})
+	c.JSON(http.StatusNoContent, nil)
 }

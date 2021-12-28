@@ -9,8 +9,8 @@ import (
 
 type User struct {
 	ID                   uuid.UUID      `json:"id" gorm:"type:uuid;primaryKey;"`
-	Email                *string        `json:"email" gorm:"unique"`
-	Username             string         `json:"username" gorm:"unique"`
+	Email                string         `json:"email" validate:"required,email" gorm:"unique"`
+	Username             string         `json:"username" validate:"required,min=2,max=20" gorm:"unique"`
 	Password             string         `json:"password" gorm:"-"`
 	PasswordConfirmation string         `json:"password_confirmation" gorm:"-"`
 	PasswordHash         string         `json:"-"`
