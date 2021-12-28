@@ -25,6 +25,7 @@ func SignUp(c *gin.Context) {
 	if body.Password != body.PasswordConfirmation {
 		c.JSON(http.StatusPartialContent, gin.H{
 			"message": "passwords must match",
+			"code":    http.StatusPartialContent,
 		})
 		return
 	}
