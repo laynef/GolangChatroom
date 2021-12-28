@@ -1,10 +1,13 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
 	"github.com/laynefaler/chatroom/models"
+	"github.com/laynefaler/chatroom/utils"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -32,10 +35,26 @@ func Login(c *gin.Context) {
 		return
 	}
 
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
+		ExpiresAt: 15000,
+		Id:        fmt.Sprint(user.ID),
+	})
+
+	secret := []byte(utils.GetWebSecret())
+	tokenString, err := token.SignedString(secret)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": err.Error(),
+			"code":    http.StatusPartialContent,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
-		"id":         user.ID,
-		"email":      user.Email,
-		"created_at": user.CreatedAt,
+		"token":    tokenString,
+		"username": user.Username,
+		"email":    user.Email,
 	})
 }
 
@@ -65,10 +84,26 @@ func SignUp(c *gin.Context) {
 
 	db.Create(&user)
 
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
+		ExpiresAt: 15000,
+		Id:        fmt.Sprint(user.ID),
+	})
+
+	secret := []byte(utils.GetWebSecret())
+	tokenString, err := token.SignedString(secret)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": err.Error(),
+			"code":    http.StatusPartialContent,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
-		"id":         user.ID,
-		"email":      user.Email,
-		"created_at": user.CreatedAt,
+		"token":    tokenString,
+		"username": user.Username,
+		"email":    user.Email,
 	})
 }
 
@@ -78,6 +113,11 @@ func ForgottenPassword(c *gin.Context) {
 }
 
 func ChangePassword(c *gin.Context) {
+	c.Header("Content-Type", "application/json")
+	c.JSON(http.StatusOK, gin.H{"hello": "world"})
+}
+
+func Logout(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
 	c.JSON(http.StatusOK, gin.H{"hello": "world"})
 }

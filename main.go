@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/laynefaler/chatroom/controllers"
+	"github.com/laynefaler/chatroom/middleware"
 	"github.com/laynefaler/chatroom/models"
 	"github.com/laynefaler/chatroom/utils"
 )
@@ -39,6 +40,10 @@ func main() {
 	v1.POST("/auth/forgotten_password", controllers.ForgottenPassword)
 	v1.PUT("/auth/change_password", controllers.ChangePassword)
 
+	// authorized routes
+	auth := r.Group("/api/v1")
+	auth.Use(middleware.Authorize)
+	auth.DELETE("/auth/logout", controllers.Logout)
 	// Serve public assets
 	r.Use(static.Serve("/public", static.LocalFile("./public", true)))
 
