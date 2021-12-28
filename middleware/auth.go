@@ -10,8 +10,8 @@ import (
 )
 
 func Authorize(c *gin.Context) {
-	tokenString := c.Request.Header.Get("authorization")
-	userId := c.Request.Header.Get("consumer.user_id")
+	tokenString, _ := c.Cookie("jwt")
+	userId, _ := c.Cookie("current_user_id")
 
 	at(time.Unix(0, 0), func() {
 		token, err := jwt.ParseWithClaims(tokenString, &jwt.StandardClaims{}, func(token *jwt.Token) (interface{}, error) {

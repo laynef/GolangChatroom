@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { useQueryClient } from 'react-query';
 import { Header, Layout } from '../components/layout';
 import { useLogin } from '../hooks/login';
 
 export const LoginPage = () => {
-    const queryClient = useQueryClient();
-    const login = useLogin(queryClient);
+    const login = useLogin();
 
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -14,10 +12,6 @@ export const LoginPage = () => {
         email,
         password,
     });
-
-    if (login.isSuccess) {
-        window.location.href = "/dashboard";
-    }
 
     return (
         <Layout>
@@ -38,7 +32,7 @@ export const LoginPage = () => {
                             Login
                         </button>
                         {login.isError ? (
-                            <div className='column'>An error occurred: {login.error.message}</div>
+                            <div className='column'>An error occurred: {login?.error}</div>
                         ) : null}
                     </div>
                 </main>

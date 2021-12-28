@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { useQueryClient } from 'react-query';
 import { Header, Layout } from '../components/layout';
 import { useSignUp } from '../hooks/signup';
 
 export const SignUpPage = () => {
-    const queryClient = useQueryClient();
-    const signup = useSignUp(queryClient);
+    const signup = useSignUp();
 
     const [email, setEmail] = React.useState('');
     const [username, setUsername] = React.useState('');
@@ -18,10 +16,6 @@ export const SignUpPage = () => {
         password,
         password_confirmation,
     });
-
-    if (signup.isSuccess) {
-        window.location.href = "/dashboard";
-    }
 
     return (
         <Layout>
@@ -50,7 +44,7 @@ export const SignUpPage = () => {
                             Sign Up
                         </button>
                         {signup.isError ? (
-                            <div className='column'>An error occurred: {signup.error.message}</div>
+                            <div className='column'>An error occurred: {signup?.error}</div>
                         ) : null}
                     </div>
                 </main>

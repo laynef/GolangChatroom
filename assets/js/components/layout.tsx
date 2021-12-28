@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import { useLogout } from '../hooks/logout';
 
 type LayoutProps = {
 }
@@ -17,6 +18,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 };
 
 export const Header: React.FC<HeaderProps> = ({ hasAuth }) => {
+    const logout = useLogout();
     return (
         <header>
             {hasAuth && (
@@ -37,7 +39,7 @@ export const Header: React.FC<HeaderProps> = ({ hasAuth }) => {
             )}
             {hasAuth && (
                 <div className='header-right'>
-                    <Link to='/'>Logout</Link>
+                    <a onClick={() => logout.mutate()} href="javascript:void(0);">Logout</a>
                 </div>
             )}
         </header>
