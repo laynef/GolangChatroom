@@ -84,8 +84,8 @@ func SignUp(c *gin.Context) {
 		PasswordHash: string(hash),
 	}
 
-	v := validator.New()
-	errors := v.Struct(user)
+	validate := validator.New()
+	errors := validate.Struct(user)
 
 	if errors != nil {
 		c.JSON(http.StatusPartialContent, gin.H{
