@@ -9,7 +9,8 @@ import { SignUpPage } from "./pages/signup";
 import { DashboardPage } from "./pages/dashboard";
 import { InternalErrorPage } from "./pages/500";
 import { QueryClient, QueryClientProvider } from 'react-query'
- 
+import { ReactQueryDevtools } from 'react-query/devtools'
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -24,6 +25,7 @@ const App = () => (
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>
         </BrowserRouter>
+        <ReactQueryDevtools />
     </QueryClientProvider>
 )
 
