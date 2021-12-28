@@ -29,7 +29,7 @@ export const SignUpPage = () => {
                 <Header />
                 <main>
                     <h1>Sign Up</h1>
-                    <form className='card' method='POST' onSubmit={onSubmit} action={null}>
+                    <div className='card'>
                         <div className='column'>
                             <label>Username</label>
                             <input value={username} onChange={e => setUsername(e.target.value)} type='text' name='username' />
@@ -46,11 +46,13 @@ export const SignUpPage = () => {
                             <label>Password Confirmation</label>
                             <input value={password_confirmation} onChange={e => setPasswordConfirmation(e.target.value)} type='password' name='password_confirmation' />
                         </div>
-                        <input type='submit' value='Sign Up' />
+                        <button type='submit' onClick={onSubmit}>
+                            Sign Up
+                        </button>
                         {signup.isError ? (
                             <div className='column'>An error occurred: {signup.error.message}</div>
                         ) : null}
-                    </form>
+                    </div>
                 </main>
             </>
         </Layout>

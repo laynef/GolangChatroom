@@ -25,7 +25,7 @@ export const LoginPage = () => {
                 <Header />
                 <main>
                     <h1>Login</h1>
-                    <form className='card' method='POST' onSubmit={onSubmit} action={null}>
+                    <div className='card'>
                         <div className='column'>
                             <label>Email</label>
                             <input value={email} onChange={e => setEmail(e.target.value)} type='email' name='email' />
@@ -34,11 +34,13 @@ export const LoginPage = () => {
                             <label>Password</label>
                             <input value={password} onChange={e => setPassword(e.target.value)} type='password' name='password' />
                         </div>
-                        <input type='submit' value='Login' />
+                        <button onClick={onSubmit} type='submit'>
+                            Login
+                        </button>
                         {login.isError ? (
                             <div className='column'>An error occurred: {login.error.message}</div>
                         ) : null}
-                    </form>
+                    </div>
                 </main>
             </>
         </Layout>
