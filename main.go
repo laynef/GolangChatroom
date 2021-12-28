@@ -37,8 +37,6 @@ func main() {
 	// authentication routes
 	v1.POST("/auth/login", controllers.Login)
 	v1.POST("/auth/signup", controllers.SignUp)
-	v1.POST("/auth/forgotten_password", controllers.ForgottenPassword)
-	v1.PUT("/auth/change_password", controllers.ChangePassword)
 
 	// authorized routes
 	auth := r.Group("/api/v1")

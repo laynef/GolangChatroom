@@ -19,6 +19,11 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
 export const Header: React.FC<HeaderProps> = ({ hasAuth }) => {
     const logout = useLogout();
+    const onLogout: React.MouseEventHandler<HTMLAnchorElement> = e => {
+        e.preventDefault();
+        logout.mutate();
+    };
+
     return (
         <header>
             {hasAuth && (
@@ -39,7 +44,7 @@ export const Header: React.FC<HeaderProps> = ({ hasAuth }) => {
             )}
             {hasAuth && (
                 <div className='header-right'>
-                    <a onClick={() => logout.mutate()} href="javascript:void(0);">Logout</a>
+                    <a onClick={onLogout} href="javascript:void(0);">Logout</a>
                 </div>
             )}
         </header>

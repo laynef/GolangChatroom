@@ -3,12 +3,12 @@ import { Header, Layout } from '../components/layout';
 import { useLogin } from '../hooks/login';
 
 export const LoginPage = () => {
-    const login = useLogin();
+    const { data, mutate } = useLogin();
 
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
 
-    const onSubmit = () => login.mutate({
+    const onSubmit = () => mutate({
         email,
         password,
     });
@@ -31,8 +31,8 @@ export const LoginPage = () => {
                         <button onClick={onSubmit} type='submit'>
                             Login
                         </button>
-                        {login.isError ? (
-                            <div className='column'>An error occurred: {login?.error}</div>
+                        {data?.code && data.code >= 400 && data.message ? (
+                            <div className='column error-message'>An error occurred: {data.message}</div>
                         ) : null}
                     </div>
                 </main>

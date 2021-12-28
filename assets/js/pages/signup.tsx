@@ -3,14 +3,14 @@ import { Header, Layout } from '../components/layout';
 import { useSignUp } from '../hooks/signup';
 
 export const SignUpPage = () => {
-    const signup = useSignUp();
+    const { mutate, data }: any = useSignUp();
 
     const [email, setEmail] = React.useState('');
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [password_confirmation, setPasswordConfirmation] = React.useState('');
 
-    const onSubmit = () => signup.mutate({
+    const onSubmit = () => mutate({
         email,
         username,
         password,
@@ -43,8 +43,8 @@ export const SignUpPage = () => {
                         <button type='submit' onClick={onSubmit}>
                             Sign Up
                         </button>
-                        {signup.isError ? (
-                            <div className='column'>An error occurred: {signup?.error}</div>
+                        {data?.code && data.code >= 400 && data.message ? (
+                            <div className='column error-message'>An error occurred: {data.message}</div>
                         ) : null}
                     </div>
                 </main>

@@ -33,7 +33,7 @@ func Login(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
-			"message": "user not found",
+			"message": "invalid email or password",
 			"code":    http.StatusNotFound,
 		})
 		return
@@ -125,16 +125,6 @@ func SignUp(c *gin.Context) {
 		"username": user.Username,
 		"email":    user.Email,
 	})
-}
-
-func ForgottenPassword(c *gin.Context) {
-	c.Header("Content-Type", "application/json")
-	c.JSON(http.StatusOK, gin.H{"hello": "world"})
-}
-
-func ChangePassword(c *gin.Context) {
-	c.Header("Content-Type", "application/json")
-	c.JSON(http.StatusOK, gin.H{"hello": "world"})
 }
 
 func Logout(c *gin.Context) {
