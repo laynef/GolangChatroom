@@ -1,43 +1,23 @@
 import * as React from 'react';
-import { useMutation } from 'react-query';
+import { useQueryClient } from 'react-query';
 import { Header, Layout } from '../components/layout';
-
-type RequestBody = {
-    email: string;
-    username: string;
-    password: string;
-    password_confirmation: string;
-}
-
-type ErrorResponse = {
-    message: string;
-    code: number;
-}
+import { useSignUp } from '../hooks/signup';
 
 export const SignUpPage = () => {
-    const signup = useMutation((body: RequestBody) => {
-        return fetch('/api/v1/auth/signup', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(body),
-        })
-        .then(res => res.json())
-        .catch((err: ErrorResponse) => err)
-    }, {
-        onError: (error: ErrorResponse) => {
-            console.error(error);
-        },
-        onSuccess: (data, variables, context) => {
-            // Boom baby!
-        },
-    });
+    const queryClient = useQueryClient();
+    const signup = useSignUp(queryClient);
 
     const [email, setEmail] = React.useState('');
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [password_confirmation, setPasswordConfirmation] = React.useState('');
+
+    const onSubmit = () => signup.mutate({
+        email,
+        username,
+        password,
+        password_confirmation,
+    });
 
     return (
         <Layout>
@@ -45,12 +25,7 @@ export const SignUpPage = () => {
                 <Header />
                 <main>
                     <h1>Sign Up</h1>
-                    <form className='card' onSubmit={() => signup.mutate({
-                        email,
-                        username,
-                        password,
-                        password_confirmation,
-                    })} action={null}>
+                    <form className='card' method='POST' onSubmit={onSubmit} action={null}>
                         <div className='column'>
                             <label>Username</label>
                             <input onChange={e => setUsername(e.target.value)} type='text' name='username' />

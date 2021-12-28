@@ -8,7 +8,7 @@ import { LoginPage } from "./pages/login";
 import { SignUpPage } from "./pages/signup";
 import { DashboardPage } from "./pages/dashboard";
 import { InternalErrorPage } from "./pages/500";
-import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
+import { QueryClient, QueryClientProvider } from 'react-query'
  
 const queryClient = new QueryClient();
 
