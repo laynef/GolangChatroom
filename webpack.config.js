@@ -15,7 +15,7 @@ const configurator = {
       ],
     }
 
-    Glob.sync("./assets/*/*.*").forEach((entry) => {
+    Glob.sync("./assets/**/*.*").forEach((entry) => {
       if (entry === './assets/css/application.scss') {
         return
       }
@@ -37,15 +37,14 @@ const configurator = {
 
   plugins() {
     var plugins = [
-      new MiniCssExtractPlugin({filename: "[name].css"}),
+      new MiniCssExtractPlugin({filename: "[name].[hash].css"}),
       new CopyWebpackPlugin({
         patterns: [{
           from: "./assets",
           globOptions: {
             ignore: [
               "**/css/**", 
-              "**/js/**", 
-              "**/src/**",
+              "**/js/**",
             ]
           }
         }],
@@ -88,7 +87,7 @@ const configurator = {
       mode: env,
       entry: configurator.entries(),
       output: {
-        filename: "[name].js", 
+        filename: "[name].[hash].js", 
         path: `${__dirname}/public/assets`,
         clean: true,
       },
@@ -99,7 +98,7 @@ const configurator = {
       }
     }
 
-    if( env === "development" ){
+    if (env === "development") {
       config.plugins.push(new LiveReloadPlugin({appendScriptTag: true}))
       return config
     }
