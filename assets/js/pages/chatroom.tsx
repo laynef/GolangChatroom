@@ -34,6 +34,7 @@ export const ChatroomPage = () => {
 
     const sendMessage = () => {
         mutate({ text });
+        setText('');
     };
 
     return (
@@ -42,10 +43,10 @@ export const ChatroomPage = () => {
                 <Header hasAuth />
                 <main>
                     <h1>{data?.name}</h1>
-                    <Card className='w-75'>
+                    <Card className='w-75 shadow'>
                         <CardBody className='d-flex flex-column'>
-                            {data?.Messages?.data?.length > 0 && data.Messages.data.map((message: any, key: number) => (
-                                <div className='w-100'>
+                            {Array.isArray(data?.Messages?.data) && data?.Messages?.data?.length > 0 && data.Messages.data.map((message: any, key: number) => (
+                                <div key={key} className='w-100'>
                                     <p>{message?.User?.username}: {message?.text}</p>
                                 </div>
                             ))}

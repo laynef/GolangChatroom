@@ -48,7 +48,7 @@ func ShowThread(c *gin.Context) {
 		Page:    page,
 		PerPage: perPage,
 		Path:    c.Request.URL.Path,
-		Sort:    "created_at desc",
+		Sort:    "created_at",
 	}).Paginate(db, &thread, uid)
 
 	showThread := models.ThreadShow{

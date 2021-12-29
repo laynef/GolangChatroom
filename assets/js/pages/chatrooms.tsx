@@ -59,14 +59,14 @@ export const ChatroomsPage = () => {
                     </div>
                     <Card className='w-75 d-flex flex-column justify-content-center shadow p-3'>
                         {isLoading && <p>Loading...</p>}
-                        {data && data.data.map((thread: Thread, key: number) => (
-                            <Link to={`/chatrooms/${thread.id}`}>
+                        {Array.isArray(data?.data) && data?.data.length > 0 && data.data.map((thread: Thread, key: number) => (
+                            <Link key={key} to={`/chatrooms/${thread.id}`}>
                                 <div className='card w-100'>
                                     {thread.name}
                                 </div>
                             </Link>
                         ))}
-                        {data?.data && data.data.length === 0 && <p>No chatrooms available</p>}
+                        {Array.isArray(data?.data) && data.data.length === 0 && <p>No chatrooms available</p>}
                     </Card>
                 </main>
                 <Modal fade backdrop isOpen={open} toggle={() => setOpen(false)}>
