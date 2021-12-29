@@ -34,11 +34,11 @@ func main() {
 	v1 := r.Group("/api/v1")
 	v1.GET("/", controllers.Home)
 
-	// authentication routes
+	// Authentication routes
 	v1.POST("/auth/login", controllers.Login)
 	v1.POST("/auth/signup", controllers.SignUp)
 
-	// authorized routes
+	// Authorized routes
 	auth := r.Group("/api/v1")
 	auth.Use(middleware.Authorize)
 	auth.DELETE("/auth/logout", controllers.Logout)
