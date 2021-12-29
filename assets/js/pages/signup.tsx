@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Button, Card, Input, InputGroup, Label } from 'reactstrap';
 import { Header, Layout } from '../components/layout';
 import { useSignUp } from '../hooks/signup';
 
@@ -23,32 +24,34 @@ export const SignUpPage = () => {
                 <Header />
                 <main>
                     <h1>Sign Up</h1>
-                    <div className='card w-75 p-3 shadow'>
-                        <div className='form-group pb-1'>
-                            <label>Username</label>
-                            <input className='form-control' value={username} onChange={e => setUsername(e.target.value)} type='text' name='username' />
-                        </div>
-                        <div className='form-group pb-1'>
-                            <label>Email</label>
-                            <input className='form-control' value={email} onChange={e => setEmail(e.target.value)} type='email' name='email' />
-                        </div>
-                        <div className='form-group pb-1'>
-                            <label>Password</label>
-                            <input className='form-control' value={password} onChange={e => setPassword(e.target.value)} type='password' name='password' />
-                        </div>
-                        <div className='form-group pb-1'>
-                            <label>Password Confirmation</label>
-                            <input className='form-control' value={password_confirmation} onChange={e => setPasswordConfirmation(e.target.value)} type='password' name='password_confirmation' />
-                        </div>
+                    <Card className='w-75 p-3 shadow'>
+                        <InputGroup className='pb-1 d-flex flex-column'>
+                            <Label>Username</Label>
+                            <Input className='w-100' value={username} onChange={e => setUsername(e.target.value)} type='text' name='username' />
+                        </InputGroup>
+                        <InputGroup className='pb-1 d-flex flex-column'>
+                            <Label>Email</Label>
+                            <Input className='w-100' value={email} onChange={e => setEmail(e.target.value)} type='email' name='email' />
+                        </InputGroup>
+                        <InputGroup className='pb-1 d-flex flex-column'>
+                            <Label>Password</Label>
+                            <Input className='w-100' value={password} onChange={e => setPassword(e.target.value)} type='password' name='password' />
+                        </InputGroup>
+                        <InputGroup className='pb-1 d-flex flex-column'>
+                            <Label>Password Confirmation</Label>
+                            <Input className='w-100' value={password_confirmation} onChange={e => setPasswordConfirmation(e.target.value)} type='password' name='password_confirmation' />
+                        </InputGroup>
                         <div className='pt-2 w-100'>
-                            <button className='btn btn-outline-primary w-100 btn-block' type='submit' onClick={onSubmit}>
+                            <Button block outline color='primary' className='w-100' onClick={onSubmit}>
                                 Sign Up
-                            </button>
+                            </Button>
                         </div>
                         {data?.code && data.code >= 400 && data.message ? (
-                            <div className='column text-danger'>An error occurred: {data.message}</div>
+                            <div className='column text-danger'>
+                                An error occurred: {data.message}
+                            </div>
                         ) : null}
-                    </div>
+                    </Card>
                 </main>
             </>
         </Layout>

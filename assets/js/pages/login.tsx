@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Button, Card, Input, InputGroup, Label } from 'reactstrap';
 import { Header, Layout } from '../components/layout';
 import { useLogin } from '../hooks/login';
 
@@ -19,24 +20,26 @@ export const LoginPage = () => {
                 <Header />
                 <main>
                     <h1>Login</h1>
-                    <div className='card w-75 p-3 shadow'>
-                        <div className='form-group pb-2'>
-                            <label>Email</label>
-                            <input className='form-control' value={email} onChange={e => setEmail(e.target.value)} type='email' name='email' />
-                        </div>
-                        <div className='form-group pb-2'>
-                            <label>Password</label>
-                            <input className='form-control' value={password} onChange={e => setPassword(e.target.value)} type='password' name='password' />
-                        </div>
+                    <Card className='w-75 p-3 shadow'>
+                        <InputGroup className='pb-2 d-flex flex-column'>
+                            <Label>Email</Label>
+                            <Input className='w-100' value={email} onChange={e => setEmail(e.target.value)} type='email' name='email' />
+                        </InputGroup>
+                        <InputGroup className='pb-2 d-flex flex-column'>
+                            <Label>Password</Label>
+                            <Input className='w-100' value={password} onChange={e => setPassword(e.target.value)} type='password' name='password' />
+                        </InputGroup>
                         <div className='pt-2 w-100'>
-                            <button className='btn w-100 btn-outline-primary btn-block' onClick={onSubmit} type='submit'>
+                            <Button block outline color='primary' className='w-100' onClick={onSubmit}>
                                 Login
-                            </button>
+                            </Button>
                         </div>
                         {data?.code && data.code >= 400 && data.message ? (
-                            <div className='column text-danger'>An error occurred: {data.message}</div>
+                            <div className='column text-danger'>
+                                An error occurred: {data.message}
+                            </div>
                         ) : null}
-                    </div>
+                    </Card>
                 </main>
             </>
         </Layout>
