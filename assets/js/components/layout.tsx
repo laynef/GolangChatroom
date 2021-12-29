@@ -28,7 +28,7 @@ export const Header: React.FC<HeaderProps> = ({ hasAuth }) => {
         <header>
             {hasAuth && (
                 <div className='header-left'>
-                    <Link to='/dashboard'>Home</Link>
+                    <Link to='/chatrooms'>Home</Link>
                 </div>
             )}
             {!hasAuth && (
@@ -44,7 +44,7 @@ export const Header: React.FC<HeaderProps> = ({ hasAuth }) => {
             )}
             {hasAuth && (
                 <div className='header-right'>
-                    <a onClick={onLogout} href="javascript:void(0);">Logout</a>
+                    <a onClick={onLogout}>Logout</a>
                 </div>
             )}
         </header>

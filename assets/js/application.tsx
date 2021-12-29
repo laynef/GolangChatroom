@@ -6,7 +6,7 @@ import { HomePage } from "./pages/home";
 import { NotFoundPage } from "./pages/404";
 import { LoginPage } from "./pages/login";
 import { SignUpPage } from "./pages/signup";
-import { DashboardPage } from "./pages/dashboard";
+import { ChatroomsPage } from "./pages/chatrooms";
 import { InternalErrorPage } from "./pages/500";
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
@@ -24,7 +24,7 @@ const RequireAuth: React.FC<any> = ({ children }) => {
     return jwt !== ''
       ? children
       : <Navigate to="/login" replace />;
-  }
+}
 
 const App = () => {
     const queryClient = new QueryClient();
@@ -36,9 +36,9 @@ const App = () => {
                     <Route path="/" element={<HomePage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/signup" element={<SignUpPage />} />
-                    <Route path="/dashboard" element={
+                    <Route path="/chatrooms" element={
                         <RequireAuth>
-                            <DashboardPage />
+                            <ChatroomsPage />
                         </RequireAuth>
                     } />
                     <Route path="/internal_server_error" element={<InternalErrorPage />} />

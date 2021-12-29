@@ -20,5 +20,5 @@ export const useLogin = () => useMutation(async (body: RequestBody) => {
         return error;
     }
 }, {
-    onSuccess: (data) => { if (data.email) window.location.href = "/dashboard" },
+    onSuccess: (data) => { if (data.email) window.location.href = "/chatrooms" },
 });
