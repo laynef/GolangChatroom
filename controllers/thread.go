@@ -36,11 +36,11 @@ func ShowThread(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
 	threadId, _ := c.Params.Get("threadId")
-	var thread models.Thread
-	var messages []models.Message
 
-	db.First(&thread, threadId)
-	db.Model(&thread).Association("Messages").Find(&messages)
+	var thread models.Thread
+
+	uid, _ := uuid.FromString(threadId)
+	db.Preload("Messages").Preload("User").First(&thread, uid)
 
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 	perPage, _ := strconv.Atoi(c.DefaultQuery("per_page", "10"))
@@ -50,9 +50,16 @@ func ShowThread(c *gin.Context) {
 		PerPage: perPage,
 		Path:    c.Request.URL.Path,
 		Sort:    "created_at desc",
-	}).Paginate(db, &messages)
+	}).Paginate(db, &thread.Messages)
 
-	c.JSON(http.StatusOK, p)
+	showThread := models.ThreadShow{
+		Messages: p,
+		ID:       thread.ID,
+		Name:     thread.Name,
+		User:     thread.User,
+	}
+
+	c.JSON(http.StatusOK, showThread)
 }
 
 func CreateThread(c *gin.Context) {

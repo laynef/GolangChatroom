@@ -44,10 +44,10 @@ func main() {
 	auth.DELETE("/auth/logout", controllers.Logout)
 	// Authorized threads
 	auth.GET("/threads", controllers.ListThreads)
-	auth.GET("/threads/{threadId}", controllers.ShowThread)
+	auth.GET("/threads/:threadId", controllers.ShowThread)
 	auth.POST("/threads", controllers.CreateThread)
-	auth.PUT("/threads/{threadId}", controllers.UpdateThread)
-	auth.DELETE("/threads/{threadId}", controllers.DestroyThread)
+	auth.PUT("/threads/:threadId", controllers.UpdateThread)
+	auth.DELETE("/threads/:threadId", controllers.DestroyThread)
 	// Authorized Messages
 	auth.POST("/messages", controllers.CreateMessage)
 	// Serve public assets
