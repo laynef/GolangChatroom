@@ -35,7 +35,7 @@ func ShowThread(c *gin.Context) {
 
 	db := c.MustGet("db").(*gorm.DB)
 
-	threadId, _ := c.Params.Get("thread_id")
+	threadId, _ := c.Params.Get("threadId")
 	var thread models.Thread
 	var messages []models.Message
 
@@ -85,7 +85,7 @@ func UpdateThread(c *gin.Context) {
 	var body models.Thread
 	c.BindJSON(&body)
 
-	threadId, _ := c.Params.Get("thread_id")
+	threadId, _ := c.Params.Get("threadId")
 	thread := db.First(threadId)
 	db.Model(&thread).Update("name", body.Name)
 
@@ -97,7 +97,7 @@ func DestroyThread(c *gin.Context) {
 
 	db := c.MustGet("db").(*gorm.DB)
 
-	threadId, _ := c.Params.Get("thread_id")
+	threadId, _ := c.Params.Get("threadId")
 	db.Delete(&models.Thread{}, threadId)
 
 	c.JSON(http.StatusNoContent, nil)
