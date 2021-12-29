@@ -46,7 +46,7 @@ export const SignUpPage = () => {
                             </button>
                         </div>
                         {data?.code && data.code >= 400 && data.message ? (
-                            <div className='column error-message'>An error occurred: {data.message}</div>
+                            <div className='column text-danger'>An error occurred: {data.message}</div>
                         ) : null}
                     </div>
                 </main>
