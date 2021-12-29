@@ -48,6 +48,8 @@ func main() {
 	auth.POST("/threads", controllers.CreateThread)
 	auth.PUT("/threads/{threadId}", controllers.UpdateThread)
 	auth.DELETE("/threads/{threadId}", controllers.DestroyThread)
+	// Authorized Messages
+	auth.POST("/messages", controllers.CreateMessage)
 	// Serve public assets
 	r.Use(static.Serve("/public", static.LocalFile("./public", true)))
 
