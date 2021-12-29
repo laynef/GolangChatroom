@@ -19,18 +19,20 @@ export const LoginPage = () => {
                 <Header />
                 <main>
                     <h1>Login</h1>
-                    <div className='card'>
-                        <div className='column'>
+                    <div className='card w-75 p-3 shadow'>
+                        <div className='form-group pb-2'>
                             <label>Email</label>
-                            <input value={email} onChange={e => setEmail(e.target.value)} type='email' name='email' />
+                            <input className='form-control' value={email} onChange={e => setEmail(e.target.value)} type='email' name='email' />
                         </div>
-                        <div className='column'>
+                        <div className='form-group pb-2'>
                             <label>Password</label>
-                            <input value={password} onChange={e => setPassword(e.target.value)} type='password' name='password' />
+                            <input className='form-control' value={password} onChange={e => setPassword(e.target.value)} type='password' name='password' />
                         </div>
-                        <button onClick={onSubmit} type='submit'>
-                            Login
-                        </button>
+                        <div className='pt-2 w-100'>
+                            <button className='btn w-100 btn-outline-primary btn-block' onClick={onSubmit} type='submit'>
+                                Login
+                            </button>
+                        </div>
                         {data?.code && data.code >= 400 && data.message ? (
                             <div className='column error-message'>An error occurred: {data.message}</div>
                         ) : null}

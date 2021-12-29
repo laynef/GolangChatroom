@@ -23,26 +23,28 @@ export const SignUpPage = () => {
                 <Header />
                 <main>
                     <h1>Sign Up</h1>
-                    <div className='card'>
-                        <div className='column'>
+                    <div className='card w-75 p-3 shadow'>
+                        <div className='form-group pb-1'>
                             <label>Username</label>
-                            <input value={username} onChange={e => setUsername(e.target.value)} type='text' name='username' />
+                            <input className='form-control' value={username} onChange={e => setUsername(e.target.value)} type='text' name='username' />
                         </div>
-                        <div className='column'>
+                        <div className='form-group pb-1'>
                             <label>Email</label>
-                            <input value={email} onChange={e => setEmail(e.target.value)} type='email' name='email' />
+                            <input className='form-control' value={email} onChange={e => setEmail(e.target.value)} type='email' name='email' />
                         </div>
-                        <div className='column'>
+                        <div className='form-group pb-1'>
                             <label>Password</label>
-                            <input value={password} onChange={e => setPassword(e.target.value)} type='password' name='password' />
+                            <input className='form-control' value={password} onChange={e => setPassword(e.target.value)} type='password' name='password' />
                         </div>
-                        <div className='column'>
+                        <div className='form-group pb-1'>
                             <label>Password Confirmation</label>
-                            <input value={password_confirmation} onChange={e => setPasswordConfirmation(e.target.value)} type='password' name='password_confirmation' />
+                            <input className='form-control' value={password_confirmation} onChange={e => setPasswordConfirmation(e.target.value)} type='password' name='password_confirmation' />
                         </div>
-                        <button type='submit' onClick={onSubmit}>
-                            Sign Up
-                        </button>
+                        <div className='pt-2 w-100'>
+                            <button className='btn btn-outline-primary w-100 btn-block' type='submit' onClick={onSubmit}>
+                                Sign Up
+                            </button>
+                        </div>
                         {data?.code && data.code >= 400 && data.message ? (
                             <div className='column error-message'>An error occurred: {data.message}</div>
                         ) : null}
