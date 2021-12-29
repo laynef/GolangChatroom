@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	uuid "github.com/satori/go.uuid"
 	"gorm.io/gorm"
 )
 
@@ -40,7 +41,7 @@ type Config struct {
 }
 
 // Paginate ..
-func (c *Config) Paginate(db *gorm.DB, any interface{}) (Result, *gorm.DB) {
+func (c *Config) Paginate(db *gorm.DB, thread *Thread, uid uuid.UUID) (Result, *gorm.DB) {
 	var r Result
 	var count int64
 
@@ -52,9 +53,12 @@ func (c *Config) Paginate(db *gorm.DB, any interface{}) (Result, *gorm.DB) {
 		d.Order(c.Sort)
 	}
 
-	d.Preload("User").Find(any)
+	db.Preload("User").Preload("Messages").First(&thread, uid)
+	d.Preload("User").Where("thread_id = ?", uid).Find(&thread.Messages)
 
-	db.Model(any).Count(&count)
+	messages := thread.Messages
+
+	db.Model(messages).Count(&count)
 
 	r.CurrentPage = c.Page
 	r.NextPageURL = c.GetPageURL(c.Page + 1)
@@ -65,7 +69,7 @@ func (c *Config) Paginate(db *gorm.DB, any interface{}) (Result, *gorm.DB) {
 	r.To = lastIndex
 	r.From = lastIndex - offset
 	r.Total = count
-	r.Data = any
+	r.Data = messages
 	r.LastPageURL = c.GetPageURL(r.GetLastPage())
 	r.LastPage = r.GetLastPage()
 

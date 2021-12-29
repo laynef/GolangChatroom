@@ -40,8 +40,6 @@ func ShowThread(c *gin.Context) {
 	var thread models.Thread
 
 	uid, _ := uuid.FromString(threadId)
-	db.Preload("Messages").Preload("User").First(&thread, uid)
-	db.Preload("User").Find(&thread.Messages)
 
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 	perPage, _ := strconv.Atoi(c.DefaultQuery("per_page", "10"))
@@ -51,7 +49,7 @@ func ShowThread(c *gin.Context) {
 		PerPage: perPage,
 		Path:    c.Request.URL.Path,
 		Sort:    "created_at desc",
-	}).Paginate(db, &thread.Messages)
+	}).Paginate(db, &thread, uid)
 
 	showThread := models.ThreadShow{
 		Messages: p,
