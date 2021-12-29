@@ -16,6 +16,7 @@ type Message struct {
 	DeletedAt gorm.DeletedAt `json:"deleted_at" gorm:"index"`
 	UserID    uuid.UUID
 	ThreadID  uuid.UUID
+	User      User
 }
 
 func (m *Message) BeforeCreate(scope *gorm.DB) (err error) {

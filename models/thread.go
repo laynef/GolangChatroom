@@ -3,8 +3,6 @@ package models
 import (
 	"time"
 
-	"github.com/dogukanayd/gorm-pagination/pagination"
-
 	uuid "github.com/satori/go.uuid"
 	"gorm.io/gorm"
 )
@@ -25,7 +23,7 @@ type ThreadShow struct {
 	User     User
 	ID       uuid.UUID `json:"id"`
 	Name     string    `json:"name"`
-	Messages pagination.Result
+	Messages Result
 }
 
 func (t *Thread) BeforeCreate(scope *gorm.DB) (err error) {

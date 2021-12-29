@@ -27,12 +27,16 @@ func Authorize(c *gin.Context) {
 
 		if claims, ok := token.Claims.(*jwt.StandardClaims); ok && token.Valid {
 			if claims.Id != userId {
+				c.SetCookie("jwt", "", -1, "/", "localhost", false, false)
+				c.SetCookie("current_user_id", "", -1, "/", "localhost", false, false)
 				c.JSON(http.StatusUnauthorized, gin.H{
 					"message": "wrong user",
 				})
 				return
 			}
 		} else {
+			c.SetCookie("jwt", "", -1, "/", "localhost", false, false)
+			c.SetCookie("current_user_id", "", -1, "/", "localhost", false, false)
 			c.JSON(http.StatusForbidden, gin.H{
 				"message": "invalid token",
 			})

@@ -41,11 +41,12 @@ func ShowThread(c *gin.Context) {
 
 	uid, _ := uuid.FromString(threadId)
 	db.Preload("Messages").Preload("User").First(&thread, uid)
+	db.Preload("User").Find(&thread.Messages)
 
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 	perPage, _ := strconv.Atoi(c.DefaultQuery("per_page", "10"))
 
-	p, _ := (&pagination.Config{
+	p, _ := (&models.Config{
 		Page:    page,
 		PerPage: perPage,
 		Path:    c.Request.URL.Path,

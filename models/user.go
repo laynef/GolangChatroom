@@ -19,6 +19,7 @@ type User struct {
 	UpdatedAt            time.Time      `json:"updated_at" gorm:"autoUpdateTime"`
 	DeletedAt            gorm.DeletedAt `json:"deleted_at" gorm:"index"`
 	Threads              []Thread
+	Messages             []Message
 }
 
 func (u *User) BeforeCreate(scope *gorm.DB) (err error) {
