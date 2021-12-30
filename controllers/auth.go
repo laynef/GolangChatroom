@@ -55,6 +55,8 @@ func Login(c *gin.Context) {
 	uuidString := fmt.Sprint(user.ID)
 	utils.CreateCookie("jwt", tokenString, c)
 	utils.CreateCookie("current_user_id", uuidString, c)
+	utils.CreateCookie("username", user.Username, c)
+
 	c.JSON(http.StatusOK, gin.H{
 		"username": user.Username,
 		"email":    user.Email,
@@ -118,6 +120,8 @@ func SignUp(c *gin.Context) {
 	uuidString := fmt.Sprint(user.ID)
 	utils.CreateCookie("jwt", tokenString, c)
 	utils.CreateCookie("current_user_id", uuidString, c)
+	utils.CreateCookie("username", user.Username, c)
+
 	c.JSON(http.StatusOK, gin.H{
 		"username": user.Username,
 		"email":    user.Email,

@@ -3,7 +3,7 @@ import { useMutation, useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { Button, Card, CardBody, CardFooter, Input } from 'reactstrap';
 import { Header, Layout } from '../components/layout';
-import * as io from 'socket.io-client';
+import { getCookie } from '../utils/auth';
 
 
 const createMessage = ({ username, text }: any) => ({
@@ -14,9 +14,9 @@ const createMessage = ({ username, text }: any) => ({
 export const ChatroomPage = () => {
     const { id } = useParams();
 
+    const username = getCookie('username');
     const [text, setText] = React.useState('');
     const [name, setName] = React.useState('');
-    const [username, setUsername] = React.useState('');
     const [messages, setMessages] = React.useState([]);
 
     const url = "ws://" + window.location.host + window.location.pathname + "/ws";
@@ -27,8 +27,7 @@ export const ChatroomPage = () => {
             const res = await fetch(`/api/v1/threads/${id}`);
             const d: any = await res.json();
             setName(d.name);
-            setUsername(d?.User?.username);
-            setMessages(d?.Messages?.data || []);
+            if (d?.Messages?.data) setMessages(d?.Messages?.data);
             return d;
         } catch (error) {
             return error;
