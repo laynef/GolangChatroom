@@ -25,7 +25,7 @@ export const ChatroomPage = () => {
     const { isLoading } = useQuery('chatroom:' + id, async () => {
         try {
             const res = await fetch(`/api/v1/threads/${id}`);
-            const d: any = res.json();
+            const d: any = await res.json();
             setName(d.name);
             setUsername(d?.User?.username);
             setMessages(d?.Messages?.data || []);
