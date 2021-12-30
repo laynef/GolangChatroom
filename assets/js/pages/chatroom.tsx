@@ -4,7 +4,8 @@ import { useParams } from 'react-router-dom';
 import { Button, Card, CardBody, CardFooter, Input } from 'reactstrap';
 import { Header, Layout } from '../components/layout';
 import { getCookie } from '../utils/auth';
-
+// @ts-ignore
+import ScrollToBottom from 'react-scroll-to-bottom';
 
 const createMessage = ({ username, text }: any) => ({
     text,
@@ -37,7 +38,7 @@ export const ChatroomPage = () => {
         } catch (error) {
             return error;
         }
-    });
+    }, { retry: false });
 
     const { mutate }: any = useMutation('thread:' + id + ':message', async (body) => {
         try {
@@ -71,11 +72,13 @@ export const ChatroomPage = () => {
                     <h1>{name}</h1>
                     <Card className='w-75 shadow'>
                         <CardBody className='d-flex flex-column'>
-                            {Array.isArray(messages) && messages.length > 0 && messages.map((message: any, key: number) => (
-                                <div key={key} className='w-100'>
-                                    <p>{message?.User?.username}: {message?.text}</p>
-                                </div>
-                            ))}
+                            <ScrollToBottom>
+                                {Array.isArray(messages) && messages.length > 0 && messages.map((message: any, key: number) => (
+                                    <div key={key} className='w-100'>
+                                        <p>{message?.User?.username}: {message?.text}</p>
+                                    </div>
+                                ))}
+                            </ScrollToBottom>
                         </CardBody>
                         <CardFooter>
                             <Input placeholder='Enter message' value={text} onChange={e => setText(e.target.value)} className='w-100' />
