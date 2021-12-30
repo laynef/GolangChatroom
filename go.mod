@@ -9,10 +9,10 @@ require (
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-playground/validator/v10 v10.4.1
 	github.com/golang-jwt/jwt v3.2.2+incompatible
-	github.com/googollee/go-socket.io v1.6.1
 	github.com/joho/godotenv v1.4.0
 	github.com/satori/go.uuid v1.2.0
 	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3
+	gopkg.in/olahol/melody.v1 v1.0.0-20170518105555-d52139073376
 	gorm.io/driver/postgres v1.2.3
 	gorm.io/gorm v1.22.4
 )
@@ -25,7 +25,9 @@ require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/gomodule/redigo v1.8.4 // indirect
 	github.com/google/go-cmp v0.5.6 // indirect
+	github.com/googollee/go-socket.io v1.6.1 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
+	github.com/graarh/golang-socketio v0.0.0-20170510162725-2c44953b9b5f // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgconn v1.10.1 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect

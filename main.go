@@ -1,58 +1,22 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
-	socketio "github.com/googollee/go-socket.io"
 	"github.com/laynefaler/chatroom/controllers"
 	"github.com/laynefaler/chatroom/middleware"
 	"github.com/laynefaler/chatroom/models"
 	"github.com/laynefaler/chatroom/utils"
+	"gopkg.in/olahol/melody.v1"
 )
 
 func main() {
 	r := gin.Default()
+	m := melody.New()
 	db := models.SetupModels()
-	io := socketio.NewServer(nil)
-
-	io.OnConnect("/", func(s socketio.Conn) error {
-		s.SetContext("")
-		fmt.Println("connected:", s.ID())
-		return nil
-	})
-
-	io.OnEvent("/", "notice", func(s socketio.Conn, msg string) {
-		log.Println("notice:", msg)
-		s.Emit("reply", "have "+msg)
-	})
-
-	io.OnEvent("/chat", "msg", func(s socketio.Conn, msg string) string {
-		s.SetContext(msg)
-		return "recv " + msg
-	})
-
-	io.OnEvent("/", "bye", func(s socketio.Conn) string {
-		last := s.Context().(string)
-		s.Emit("bye", last)
-		s.Close()
-		return last
-	})
-
-	io.OnError("/", func(s socketio.Conn, e error) {
-		fmt.Println("meet error:", e)
-	})
-
-	io.OnDisconnect("/", func(s socketio.Conn, reason string) {
-		fmt.Println("closed", reason)
-	})
-
-	go io.Serve()
-	defer io.Close()
 
 	// Load views
 	r.LoadHTMLGlob("views/*.html")
@@ -89,6 +53,16 @@ func main() {
 	// Serve public assets
 	r.Use(static.Serve("/public", static.LocalFile("./public", true)))
 
+	r.GET("/chatrooms/:id/ws", func(c *gin.Context) {
+		m.HandleRequest(c.Writer, c.Request)
+	})
+
+	m.HandleMessage(func(s *melody.Session, msg []byte) {
+		m.BroadcastFilter(msg, func(q *melody.Session) bool {
+			return q.Request.URL.Path == s.Request.URL.Path
+		})
+	})
+
 	// Return html for all other routes
 	// The browser controls the HTML routing
 	r.NoRoute(func(c *gin.Context) {
@@ -100,9 +74,6 @@ func main() {
 			"stylesheet": stylesheet,
 		})
 	})
-
-	r.GET("/socket.io/*any", gin.WrapH(io))
-	r.POST("/socket.io/*any", gin.WrapH(io))
 
 	r.Run()
 }

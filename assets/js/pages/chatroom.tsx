@@ -6,12 +6,30 @@ import { Header, Layout } from '../components/layout';
 import * as io from 'socket.io-client';
 
 
+const createMessage = ({ username, text }: any) => ({
+    text,
+    User: { username },
+})
+
 export const ChatroomPage = () => {
     const { id } = useParams();
-    const { data, isLoading } = useQuery('chatroom:' + id, async () => {
+
+    const [text, setText] = React.useState('');
+    const [name, setName] = React.useState('');
+    const [username, setUsername] = React.useState('');
+    const [messages, setMessages] = React.useState([]);
+
+    const url = "ws://" + window.location.host + window.location.pathname + "/ws";
+    const ws = new WebSocket(url);
+
+    const { isLoading } = useQuery('chatroom:' + id, async () => {
         try {
             const res = await fetch(`/api/v1/threads/${id}`);
-            return res.json();
+            const d: any = res.json();
+            setName(d.name);
+            setUsername(d?.User?.username);
+            setMessages(d?.Messages?.data || []);
+            return d;
         } catch (error) {
             return error;
         }
@@ -32,44 +50,24 @@ export const ChatroomPage = () => {
         }
     });
 
-    const [text, setText] = React.useState('');
-    const [socket, setSocket] = React.useState(null);
-    const [socketConnected, setSocketConnected] = React.useState(false);
-
-    // establish socket connection
-    React.useEffect(() => {
-        setSocket(io('http://localhost:8080'));
-    }, []);
-
-      // subscribe to the socket event
-    React.useEffect(() => {
-        if (!socket) return;
-    
-        socket.on('connect', () => {
-            setSocketConnected(socket.connected);
-        });
-        socket.on('disconnect', () => {
-            setSocketConnected(socket.connected);
-        });
-    
-    }, [socket]);
-
-    console.log(socketConnected);
-
     const sendMessage = () => {
-        mutate({ name });
+        mutate({ text });
+        const m = createMessage({ text, username });
+        ws.send(JSON.stringify(m));
         setText('');
     }
+
+    ws.onmessage = (msg) => setMessages([...messages, JSON.parse(msg.data)]);
 
     return (
         <Layout>
             <>
                 <Header hasAuth />
                 <main>
-                    <h1>{data?.name}</h1>
+                    <h1>{name}</h1>
                     <Card className='w-75 shadow'>
                         <CardBody className='d-flex flex-column'>
-                            {Array.isArray(data?.Messages?.data) && data?.Messages?.data?.length > 0 && data.Messages.data.map((message: any, key: number) => (
+                            {Array.isArray(messages) && messages.length > 0 && messages.map((message: any, key: number) => (
                                 <div key={key} className='w-100'>
                                     <p>{message?.User?.username}: {message?.text}</p>
                                 </div>

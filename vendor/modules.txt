@@ -29,7 +29,6 @@ github.com/go-playground/universal-translator
 github.com/go-playground/validator/v10
 # github.com/gofrs/uuid v4.0.0+incompatible
 ## explicit
-github.com/gofrs/uuid
 # github.com/golang-jwt/jwt v3.2.2+incompatible
 ## explicit
 github.com/golang-jwt/jwt
@@ -38,25 +37,15 @@ github.com/golang-jwt/jwt
 github.com/golang/protobuf/proto
 # github.com/gomodule/redigo v1.8.4
 ## explicit; go 1.14
-github.com/gomodule/redigo/redis
 # github.com/google/go-cmp v0.5.6
 ## explicit; go 1.8
 # github.com/googollee/go-socket.io v1.6.1
 ## explicit; go 1.16
-github.com/googollee/go-socket.io
-github.com/googollee/go-socket.io/engineio
-github.com/googollee/go-socket.io/engineio/frame
-github.com/googollee/go-socket.io/engineio/packet
-github.com/googollee/go-socket.io/engineio/payload
-github.com/googollee/go-socket.io/engineio/session
-github.com/googollee/go-socket.io/engineio/transport
-github.com/googollee/go-socket.io/engineio/transport/polling
-github.com/googollee/go-socket.io/engineio/transport/utils
-github.com/googollee/go-socket.io/engineio/transport/websocket
-github.com/googollee/go-socket.io/parser
 # github.com/gorilla/websocket v1.4.2
 ## explicit; go 1.12
 github.com/gorilla/websocket
+# github.com/graarh/golang-socketio v0.0.0-20170510162725-2c44953b9b5f
+## explicit
 # github.com/jackc/chunkreader/v2 v2.0.1
 ## explicit; go 1.12
 github.com/jackc/chunkreader/v2
@@ -176,6 +165,9 @@ google.golang.org/protobuf/runtime/protoimpl
 google.golang.org/protobuf/types/descriptorpb
 # gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15
 ## explicit
+# gopkg.in/olahol/melody.v1 v1.0.0-20170518105555-d52139073376
+## explicit
+gopkg.in/olahol/melody.v1
 # gopkg.in/yaml.v2 v2.4.0
 ## explicit; go 1.15
 gopkg.in/yaml.v2
