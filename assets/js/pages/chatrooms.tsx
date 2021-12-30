@@ -76,7 +76,7 @@ export const ChatroomsPage = () => {
                     <ModalBody>
                         <InputGroup className='d-flex flex-column w-100'>
                             <Label>Name</Label>
-                            <Input className='w-100' onChange={e => setName(e.target.value)} type='text' name='name' />
+                            <Input placeholder='Enter name' className='w-100' onChange={e => setName(e.target.value)} type='text' name='name' />
                         </InputGroup>
                         {threadData?.code && threadData.code >= 400 && threadData.message ? (
                             <div className='column text-danger'>

@@ -46,10 +46,10 @@ export const ChatroomPage = () => {
         if (!socket) return;
     
         socket.on('connect', () => {
-        setSocketConnected(socket.connected);
+            setSocketConnected(socket.connected);
         });
         socket.on('disconnect', () => {
-        setSocketConnected(socket.connected);
+            setSocketConnected(socket.connected);
         });
     
     }, [socket]);
@@ -76,7 +76,7 @@ export const ChatroomPage = () => {
                             ))}
                         </CardBody>
                         <CardFooter>
-                            <Input value={text} onChange={e => setText(e.target.value)} className='w-100' />
+                            <Input placeholder='Enter message' value={text} onChange={e => setText(e.target.value)} className='w-100' />
                             <Button onClick={sendMessage} block color='primary'>
                                 Submit
                             </Button>
