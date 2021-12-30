@@ -17,7 +17,7 @@ import (
 
 func main() {
 	r := gin.Default()
-
+	db := models.SetupModels()
 	io := socketio.NewServer(nil)
 
 	io.OnConnect("/", func(s socketio.Conn) error {
@@ -51,11 +51,11 @@ func main() {
 		fmt.Println("closed", reason)
 	})
 
+	go io.Serve()
+	defer io.Close()
+
 	// Load views
 	r.LoadHTMLGlob("views/*.html")
-
-	// connect to database
-	db := models.SetupModels()
 
 	// Provide db variable to controllers
 	r.Use(func(c *gin.Context) {
@@ -100,9 +100,6 @@ func main() {
 			"stylesheet": stylesheet,
 		})
 	})
-
-	go io.Serve()
-	defer io.Close()
 
 	r.GET("/socket.io/*any", gin.WrapH(io))
 	r.POST("/socket.io/*any", gin.WrapH(io))

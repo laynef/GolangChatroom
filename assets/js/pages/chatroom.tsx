@@ -3,12 +3,11 @@ import { useMutation, useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { Button, Card, CardBody, CardFooter, Input } from 'reactstrap';
 import { Header, Layout } from '../components/layout';
-import { useSocket } from 'socket.io-react-hook';
+import * as io from 'socket.io-client';
 
 
 export const ChatroomPage = () => {
     const { id } = useParams();
-    const socket = useSocket('/', {});
     const { data, isLoading } = useQuery('chatroom:' + id, async () => {
         try {
             const res = await fetch(`/api/v1/threads/${id}`);
@@ -34,13 +33,33 @@ export const ChatroomPage = () => {
     });
 
     const [text, setText] = React.useState('');
+    const [socket, setSocket] = React.useState(null);
+    const [socketConnected, setSocketConnected] = React.useState(false);
+
+    // establish socket connection
+    React.useEffect(() => {
+        setSocket(io('http://localhost:8080'));
+    }, []);
+
+      // subscribe to the socket event
+    React.useEffect(() => {
+        if (!socket) return;
+    
+        socket.on('connect', () => {
+        setSocketConnected(socket.connected);
+        });
+        socket.on('disconnect', () => {
+        setSocketConnected(socket.connected);
+        });
+    
+    }, [socket]);
+
+    console.log(socketConnected);
 
     const sendMessage = () => {
-        mutate({ text });
+        mutate({ name });
         setText('');
-    };
-
-    console.log(socket)
+    }
 
     return (
         <Layout>
