@@ -1,11 +1,14 @@
 package main
 
 import (
+	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
+	socketio "github.com/googollee/go-socket.io"
 	"github.com/laynefaler/chatroom/controllers"
 	"github.com/laynefaler/chatroom/middleware"
 	"github.com/laynefaler/chatroom/models"
@@ -14,6 +17,39 @@ import (
 
 func main() {
 	r := gin.Default()
+
+	io := socketio.NewServer(nil)
+
+	io.OnConnect("/", func(s socketio.Conn) error {
+		s.SetContext("")
+		fmt.Println("connected:", s.ID())
+		return nil
+	})
+
+	io.OnEvent("/", "notice", func(s socketio.Conn, msg string) {
+		log.Println("notice:", msg)
+		s.Emit("reply", "have "+msg)
+	})
+
+	io.OnEvent("/chat", "msg", func(s socketio.Conn, msg string) string {
+		s.SetContext(msg)
+		return "recv " + msg
+	})
+
+	io.OnEvent("/", "bye", func(s socketio.Conn) string {
+		last := s.Context().(string)
+		s.Emit("bye", last)
+		s.Close()
+		return last
+	})
+
+	io.OnError("/", func(s socketio.Conn, e error) {
+		fmt.Println("meet error:", e)
+	})
+
+	io.OnDisconnect("/", func(s socketio.Conn, reason string) {
+		fmt.Println("closed", reason)
+	})
 
 	// Load views
 	r.LoadHTMLGlob("views/*.html")
@@ -64,6 +100,12 @@ func main() {
 			"stylesheet": stylesheet,
 		})
 	})
+
+	go io.Serve()
+	defer io.Close()
+
+	r.GET("/socket.io/*any", gin.WrapH(io))
+	r.POST("/socket.io/*any", gin.WrapH(io))
 
 	r.Run()
 }

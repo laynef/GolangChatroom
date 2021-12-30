@@ -3,9 +3,12 @@ import { useMutation, useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { Button, Card, CardBody, CardFooter, Input } from 'reactstrap';
 import { Header, Layout } from '../components/layout';
+import { useSocket } from 'socket.io-react-hook';
+
 
 export const ChatroomPage = () => {
     const { id } = useParams();
+    const socket = useSocket('/', {});
     const { data, isLoading } = useQuery('chatroom:' + id, async () => {
         try {
             const res = await fetch(`/api/v1/threads/${id}`);
@@ -36,6 +39,8 @@ export const ChatroomPage = () => {
         mutate({ text });
         setText('');
     };
+
+    console.log(socket)
 
     return (
         <Layout>
