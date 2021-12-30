@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"math"
 	"os"
 
 	uuid "github.com/satori/go.uuid"
@@ -46,7 +47,7 @@ func (c *Config) Paginate(db *gorm.DB, thread *Thread, uid uuid.UUID) (Result, *
 	var count int64
 
 	offset := (c.Page - 1) * c.PerPage
-	lastIndex := offset * c.Page
+	lastIndex := c.PerPage * c.Page
 	d := db.Offset(offset).Limit(c.PerPage)
 
 	if c.Sort != "" {
@@ -58,6 +59,10 @@ func (c *Config) Paginate(db *gorm.DB, thread *Thread, uid uuid.UUID) (Result, *
 
 	messages := thread.Messages
 
+	for i, j := 0, len(messages)-1; i < j; i, j = i+1, j-1 {
+		messages[i], messages[j] = messages[j], messages[i]
+	}
+
 	db.Model(messages).Count(&count)
 
 	r.CurrentPage = c.Page
@@ -67,7 +72,7 @@ func (c *Config) Paginate(db *gorm.DB, thread *Thread, uid uuid.UUID) (Result, *
 	r.PerPage = c.PerPage
 	r.Path = c.Path
 	r.To = lastIndex
-	r.From = lastIndex - offset
+	r.From = lastIndex - c.PerPage + 1
 	r.Total = count
 	r.Data = messages
 	r.LastPageURL = c.GetPageURL(r.GetLastPage())
@@ -78,7 +83,9 @@ func (c *Config) Paginate(db *gorm.DB, thread *Thread, uid uuid.UUID) (Result, *
 
 // GetLastPage ..
 func (r *Result) GetLastPage() int {
-	return int(r.Total) / r.PerPage
+
+	page := float64(r.Total) / float64(r.PerPage)
+	return int(math.Ceil(page))
 }
 
 func (c *Config) GetPageURL(page int) string {

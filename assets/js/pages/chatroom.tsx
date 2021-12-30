@@ -13,10 +13,12 @@ const createMessage = ({ username, text }: any) => ({
 
 export const ChatroomPage = () => {
     const { id } = useParams();
+    const perPage = 10;
 
     const username = getCookie('username');
     const [text, setText] = React.useState('');
     const [name, setName] = React.useState('');
+    const [page, setPage] = React.useState(`/api/v1/threads/${id}?page=1&per_page=${perPage}`);
     const [messages, setMessages] = React.useState([]);
 
     const url = "ws://" + window.location.host + window.location.pathname + "/ws";
@@ -24,10 +26,13 @@ export const ChatroomPage = () => {
 
     const { isLoading } = useQuery('chatroom:' + id, async () => {
         try {
-            const res = await fetch(`/api/v1/threads/${id}`);
+            const res = await fetch(page);
             const d: any = await res.json();
             setName(d.name);
-            if (d?.Messages?.data) setMessages(d?.Messages?.data);
+            if (d?.Messages?.data?.length && d.Messages.current_page <= d.Messages.last_page) {
+                setMessages([...d?.Messages?.data, ...messages]);
+                setPage(d.Messages.next_page_url)
+            }
             return d;
         } catch (error) {
             return error;
