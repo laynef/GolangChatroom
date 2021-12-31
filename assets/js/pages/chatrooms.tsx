@@ -85,12 +85,16 @@ export const ChatroomsPage = () => {
                         ) : null}
                     </ModalBody>
                     <ModalFooter>
-                    <Button
-                        color="primary"
-                        onClick={() => mutate({ name })}
-                    >
-                        Create
-                    </Button>
+
+                    <div>
+                        <Input
+                            className="btn btn-primary"
+                            onSubmit={() => mutate({ name })}
+                            onClick={() => mutate({ name })}
+                            value="Create"
+                            type='submit'
+                        />
+                    </div>
                     {' '}
                     <Button outline onClick={() => setOpen(false)}>
                         Cancel

@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { Button, Card, CardBody, CardFooter, Input } from 'reactstrap';
+import { Card, CardBody, CardFooter, Form, Input } from 'reactstrap';
 import { Header, Layout } from '../components/layout';
 import { getCookie } from '../utils/auth';
+// @ts-ignore
+import ScrollToBottom from 'react-scroll-to-bottom';
 
 
 const createMessage = ({ username, text }: any) => ({
@@ -13,7 +15,7 @@ const createMessage = ({ username, text }: any) => ({
 
 export const ChatroomPage = () => {
     const { id } = useParams();
-    const perPage = 10;
+    const perPage = 20;
 
     const username = getCookie('username');
     const [text, setText] = React.useState('');
@@ -21,12 +23,13 @@ export const ChatroomPage = () => {
     const [lastPage, setLastPage] = React.useState(1);
     const [page, setPage] = React.useState(1);
     const [messages, setMessages] = React.useState([]);
+    const loader = React.useRef(null);
 
     const url = "ws://" + window.location.host + window.location.pathname + "/ws";
     const ws = new WebSocket(url);
     const fetchMessagesUrl = `/api/v1/threads/${id}?page=${page}&per_page=${perPage}`;
 
-    const { isLoading } = useQuery('chatroom:' + id, async () => {
+    const { isLoading, refetch } = useQuery('chatroom:' + id, async () => {
         if (page > lastPage) return null;
 
         try {
@@ -59,6 +62,23 @@ export const ChatroomPage = () => {
         }
     });
 
+    const handleObserver = React.useCallback((entries) => {
+        const target = entries[0];
+        if (target.isIntersecting) {
+            refetch();
+        }
+    }, []);
+
+    React.useEffect(() => {
+        const option = {
+            root: null as any,
+            rootMargin: "20px",
+            threshold: 0
+        };
+        const observer = new IntersectionObserver(handleObserver, option);
+        if (loader.current) observer.observe(loader.current);
+    }, [handleObserver]);
+
     const sendMessage = () => {
         mutate({ text });
         const m = createMessage({ text, username });
@@ -66,7 +86,9 @@ export const ChatroomPage = () => {
         setText('');
     }
 
-    ws.onmessage = (msg) => setMessages([...messages, JSON.parse(msg.data)]);
+    ws.onmessage = (msg) => {
+        setMessages([...messages, JSON.parse(msg.data)]);
+    }
 
     return (
         <Layout>
@@ -75,19 +97,22 @@ export const ChatroomPage = () => {
                 <main>
                     <h1>{name}</h1>
                     <Card className='w-75 shadow'>
-                        <CardBody className='d-flex flex-column scroll-container'>
-                            {Array.isArray(messages) && messages.length > 0 && messages.map((message: any, key: number) => (
-                                <div key={key} className='w-100'>
-                                    <p>{message?.User?.username}: {message?.text}</p>
-                                </div>
-                            ))}
-                        </CardBody>
-                        <CardFooter>
-                            <Input placeholder='Enter message' value={text} onChange={e => setText(e.target.value)} className='w-100' />
-                            <Button onClick={sendMessage} block color='primary'>
-                                Submit
-                            </Button>
-                        </CardFooter>
+                        <Form onSubmit={sendMessage} method='none' action={null}>
+                            <CardBody className='d-flex flex-column'>
+                                <ScrollToBottom id="scroll-container" behavior="auto" className='scroll-container'>
+                                    <div ref={loader} />
+                                    {Array.isArray(messages) && messages.length > 0 && messages.map((message: any, key: number) => (
+                                        <div key={key} className='w-100'>
+                                            <p>{message?.User?.username}: {message?.text}</p>
+                                        </div>
+                                    ))}
+                                </ScrollToBottom>
+                            </CardBody>
+                            <CardFooter>
+                                <Input placeholder='Enter message' value={text} onChange={e => setText(e.target.value)} className='w-100' />
+                                <Input type='submit' className='btn btn-block btn-primary' value="Send" />
+                            </CardFooter>
+                        </Form>
                     </Card>
                     {isLoading && <p>Loading...</p>}
                 </main>
