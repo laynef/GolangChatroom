@@ -89,15 +89,28 @@ export const ChatroomPage = () => {
 
     React.useEffect(() => {
         ws.onmessage = (msg) => {
-            console.log(msg)
+            console.log(msg, url)
+            const socket = msg.target as WebSocket;
+            if (socket.url !== url) return socket.close();
+
             toast.dismiss();
             const d = JSON.parse(msg.data);
             if (d?.User?.username !== username) {
                 toast.info(`${d?.User?.username}: ${d?.text}`, { autoClose: 3000 });
             }
             setMessages([...messages, d]);
-        }    
+        }
+
+        ws.onclose = () => toast.dismiss();
+
     }, [ws, setMessages, messages]);
+
+    React.useEffect(() => {
+        window.addEventListener('beforeunload', () => ws.close())
+        return () => {
+          window.removeEventListener('beforeunload', () => ws.close())
+        }
+      }, [ws])
 
     const sendMessage: React.FormEventHandler = (e) => {
         e.preventDefault();
@@ -132,7 +145,6 @@ export const ChatroomPage = () => {
                             </CardFooter>
                         </Form>
                     </Card>
-                    {isLoading && <p>Loading...</p>}
                 </main>
                 <ToastContainer />
             </>
