@@ -45,6 +45,11 @@ export const ChatroomsPage = () => {
     const [open, setOpen] = React.useState(false);
     const [name, setName] = React.useState('');
 
+    const createThread: React.FormEventHandler = (e) => { 
+        e.preventDefault(); 
+        mutate({ name }) 
+    };
+
     return (
         <Layout>
             <>
@@ -70,7 +75,7 @@ export const ChatroomsPage = () => {
                     </Card>
                 </main>
                 <Modal fade backdrop isOpen={open} toggle={() => setOpen(false)}>
-                    <form onSubmit={(e) => { e.preventDefault(); mutate({ name }) }}>
+                    <form onSubmit={createThread}>
                         <ModalHeader toggle={() => setOpen(false)}>
                             Create Chatroom
                         </ModalHeader>
