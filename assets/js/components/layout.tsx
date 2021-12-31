@@ -44,7 +44,7 @@ export const Header: React.FC<HeaderProps> = ({ hasAuth }) => {
             )}
             {hasAuth && (
                 <div className='header-right'>
-                    <a onClick={onLogout}>Logout</a>
+                    <a href="#" onClick={onLogout}>Logout</a>
                 </div>
             )}
         </header>
