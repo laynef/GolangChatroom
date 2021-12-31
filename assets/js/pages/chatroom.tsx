@@ -146,7 +146,7 @@ export const ChatroomPage = () => {
                         </Form>
                     </Card>
                 </main>
-                <ToastContainer />
+                <ToastContainer pauseOnFocusLoss={false} />
             </>
         </Layout>
     )
