@@ -3,7 +3,7 @@ import { useMutation, useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import { Button, Card, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { Header, Layout } from '../components/layout';
-
+import { ClipLoader } from "react-spinners";
 
 type Thread = {
     id: string;
@@ -63,7 +63,7 @@ export const ChatroomsPage = () => {
                         </Button>
                     </div>
                     <Card className='w-75 d-flex flex-column justify-content-center shadow p-3'>
-                        {isLoading && <p>Loading...</p>}
+                        <ClipLoader color='aqua' loading={isLoading} />
                         {Array.isArray(data?.data) && data?.data.length > 0 && data.data.map((thread: Thread, key: number) => (
                             <Link key={key} to={`/chatrooms/${thread.id}`}>
                                 <div className='card w-100'>

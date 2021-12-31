@@ -58,6 +58,7 @@
     "react-query": "^3.34.6",
     "react-router-dom": "^6.2.1",
     "react-scroll-to-bottom": "^4.2.0",
+    "react-spinners": "^0.11.0",
     "reactstrap": "^9.0.1"
   }
 }

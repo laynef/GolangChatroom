@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Card, CardBody, CardFooter, Form, Input } from 'reactstrap';
 import { Header, Layout } from '../components/layout';
 import { getCookie } from '../utils/auth';
+import { ClipLoader } from "react-spinners";
 // @ts-ignore
 import ScrollToBottom from 'react-scroll-to-bottom';
 
@@ -101,6 +102,7 @@ export const ChatroomPage = () => {
                             <CardBody className='d-flex flex-column'>
                                 <ScrollToBottom id="scroll-container" behavior="auto" className='scroll-container'>
                                     <div ref={loader} />
+                                    <ClipLoader color='aqua' loading={isLoading} />
                                     {Array.isArray(messages) && messages.length > 0 && messages.map((message: any, key: number) => (
                                         <div key={key} className='w-100'>
                                             <p>{message?.User?.username}: {message?.text}</p>
