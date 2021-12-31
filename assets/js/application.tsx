@@ -1,4 +1,5 @@
 import "../css/application.scss";
+import 'react-toastify/dist/ReactToastify.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -12,7 +13,6 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { ChatroomPage } from "./pages/chatroom";
 import { RequireAuth } from "./utils/auth";
-
 
 const App = () => {
     const queryClient = new QueryClient();
