@@ -18,26 +18,31 @@ export const ChatroomPage = () => {
     const username = getCookie('username');
     const [text, setText] = React.useState('');
     const [name, setName] = React.useState('');
-    const [page, setPage] = React.useState(`/api/v1/threads/${id}?page=1&per_page=${perPage}`);
+    const [lastPage, setLastPage] = React.useState(1);
+    const [page, setPage] = React.useState(1);
     const [messages, setMessages] = React.useState([]);
 
     const url = "ws://" + window.location.host + window.location.pathname + "/ws";
     const ws = new WebSocket(url);
+    const fetchMessagesUrl = `/api/v1/threads/${id}?page=${page}&per_page=${perPage}`;
 
     const { isLoading } = useQuery('chatroom:' + id, async () => {
+        if (page > lastPage) return null;
+
         try {
-            const res = await fetch(page);
+            const res = await fetch(fetchMessagesUrl);
             const d: any = await res.json();
             setName(d.name);
-            if (d?.Messages?.data?.length && d.Messages.current_page <= d.Messages.last_page) {
-                setMessages([...d?.Messages?.data, ...messages]);
-                setPage(d.Messages.next_page_url)
+            if (d?.Messages?.data?.length && page <= d.Messages.last_page) {
+                setMessages([...d.Messages.data, ...messages]);
+                setPage(page + 1);
+                setLastPage(d.Messages.last_page);
             }
             return d;
         } catch (error) {
             return error;
         }
-    });
+    }, { retry: false });
 
     const { mutate }: any = useMutation('thread:' + id + ':message', async (body) => {
         try {
@@ -70,7 +75,7 @@ export const ChatroomPage = () => {
                 <main>
                     <h1>{name}</h1>
                     <Card className='w-75 shadow'>
-                        <CardBody className='d-flex flex-column'>
+                        <CardBody className='d-flex flex-column scroll-container'>
                             {Array.isArray(messages) && messages.length > 0 && messages.map((message: any, key: number) => (
                                 <div key={key} className='w-100'>
                                     <p>{message?.User?.username}: {message?.text}</p>
