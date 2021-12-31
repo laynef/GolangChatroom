@@ -70,36 +70,36 @@ export const ChatroomsPage = () => {
                     </Card>
                 </main>
                 <Modal fade backdrop isOpen={open} toggle={() => setOpen(false)}>
-                    <ModalHeader toggle={() => setOpen(false)}>
-                        Create Chatroom
-                    </ModalHeader>
-                    <ModalBody>
-                        <InputGroup className='d-flex flex-column w-100'>
-                            <Label>Name</Label>
-                            <Input placeholder='Enter name' className='w-100' onChange={e => setName(e.target.value)} type='text' name='name' />
-                        </InputGroup>
-                        {threadData?.code && threadData.code >= 400 && threadData.message ? (
-                            <div className='column text-danger'>
-                                An error occurred: {threadData.message}
-                            </div>
-                        ) : null}
-                    </ModalBody>
-                    <ModalFooter>
+                    <form onSubmit={(e) => { e.preventDefault(); mutate({ name }) }}>
+                        <ModalHeader toggle={() => setOpen(false)}>
+                            Create Chatroom
+                        </ModalHeader>
+                        <ModalBody>
+                            <InputGroup className='d-flex flex-column w-100'>
+                                <Label>Name</Label>
+                                <Input placeholder='Enter name' className='w-100' onChange={e => setName(e.target.value)} type='text' name='name' />
+                            </InputGroup>
+                            {threadData?.code && threadData.code >= 400 && threadData.message ? (
+                                <div className='column text-danger'>
+                                    An error occurred: {threadData.message}
+                                </div>
+                            ) : null}
+                        </ModalBody>
+                        <ModalFooter>
 
-                    <div>
-                        <Input
-                            className="btn btn-primary"
-                            onSubmit={() => mutate({ name })}
-                            onClick={() => mutate({ name })}
-                            value="Create"
-                            type='submit'
-                        />
-                    </div>
-                    {' '}
-                    <Button outline onClick={() => setOpen(false)}>
-                        Cancel
-                    </Button>
-                    </ModalFooter>
+                        <div>
+                            <Input
+                                className="btn btn-primary"
+                                value="Create"
+                                type='submit'
+                            />
+                        </div>
+                        {' '}
+                        <Button outline onClick={() => setOpen(false)}>
+                            Cancel
+                        </Button>
+                        </ModalFooter>
+                    </form>
                 </Modal>
             </>
         </Layout>
