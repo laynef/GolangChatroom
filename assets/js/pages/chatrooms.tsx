@@ -100,8 +100,8 @@ export const ChatroomsPage = () => {
                             +
                         </Button>
                     </div>
-                    <ScrollToBottom mode='top' behavior="smooth" className='w-75 d-flex flex-column justify-content-center shadow p-3 '>
-                        <Card id="scroll-container" className='scroll-container'>
+                    <ScrollToBottom mode='top' behavior="smooth" className='w-75 card d-flex flex-column justify-content-center shadow p-3 '>
+                        <div id="scroll-container" className='scroll-container'>
                             <ClipLoader color='aqua' loading={isLoading} />
                             {rooms.length > 0 && rooms.map((thread: Thread, key: number) => (
                                 <Link className='text-primary' key={key} to={`/chatrooms/${thread.id}`}>
@@ -114,7 +114,7 @@ export const ChatroomsPage = () => {
                             ))}
                             {!isLoading && rooms.length === 0 && <p>No chatrooms available</p>}
                             <div ref={loader} />
-                    </Card>
+                    </div>
                     </ScrollToBottom>
                 </main>
                 <Modal fade backdrop isOpen={open} toggle={() => setOpen(false)}>
