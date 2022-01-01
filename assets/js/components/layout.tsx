@@ -11,7 +11,7 @@ type HeaderProps = {
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
     return (
-        <div className='container'>
+        <div className='main-container'>
             {children}
         </div>
     )

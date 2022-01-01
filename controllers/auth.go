@@ -13,9 +13,6 @@ import (
 	"gorm.io/gorm"
 )
 
-var JwtExpiresAt int64 = 15000
-var JwtCookieExpiresAt int = 15000
-
 func Login(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
 
@@ -40,7 +37,7 @@ func Login(c *gin.Context) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
-		ExpiresAt: JwtExpiresAt,
+		ExpiresAt: utils.JwtExpiresAt,
 		Id:        fmt.Sprint(user.ID),
 	})
 
@@ -56,8 +53,8 @@ func Login(c *gin.Context) {
 	}
 
 	uuidString := fmt.Sprint(user.ID)
-	c.SetCookie("jwt", tokenString, JwtCookieExpiresAt, "/", "localhost", false, false)
-	c.SetCookie("current_user_id", uuidString, JwtCookieExpiresAt, "/", "localhost", false, false)
+	utils.CreateCookie("jwt", tokenString, c)
+	utils.CreateCookie("current_user_id", uuidString, c)
 	c.JSON(http.StatusOK, gin.H{
 		"username": user.Username,
 		"email":    user.Email,
@@ -103,7 +100,7 @@ func SignUp(c *gin.Context) {
 	db.Create(&user)
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
-		ExpiresAt: JwtExpiresAt,
+		ExpiresAt: utils.JwtExpiresAt,
 		Id:        fmt.Sprint(user.ID),
 	})
 
@@ -119,8 +116,8 @@ func SignUp(c *gin.Context) {
 	}
 
 	uuidString := fmt.Sprint(user.ID)
-	c.SetCookie("jwt", tokenString, JwtCookieExpiresAt, "/", "localhost", false, false)
-	c.SetCookie("current_user_id", uuidString, JwtCookieExpiresAt, "/", "localhost", false, false)
+	utils.CreateCookie("jwt", tokenString, c)
+	utils.CreateCookie("current_user_id", uuidString, c)
 	c.JSON(http.StatusOK, gin.H{
 		"username": user.Username,
 		"email":    user.Email,
@@ -129,7 +126,6 @@ func SignUp(c *gin.Context) {
 
 func Logout(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
-	c.SetCookie("jwt", "", -1, "/", "localhost", false, false)
-	c.SetCookie("current_user_id", "", -1, "/", "localhost", false, false)
+	utils.ClearAuthCookies(c)
 	c.JSON(http.StatusNoContent, nil)
 }

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Button, Card, Form, Input, InputGroup, Label } from 'reactstrap';
 import { Header, Layout } from '../components/layout';
 import { useLogin } from '../hooks/login';
 
@@ -8,10 +9,13 @@ export const LoginPage = () => {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
 
-    const onSubmit = () => mutate({
-        email,
-        password,
-    });
+    const onSubmit: React.FormEventHandler = (e) => {
+        e.preventDefault();
+        mutate({
+            email,
+            password,
+        });
+    }
 
     return (
         <Layout>
@@ -19,22 +23,26 @@ export const LoginPage = () => {
                 <Header />
                 <main>
                     <h1>Login</h1>
-                    <div className='card'>
-                        <div className='column'>
-                            <label>Email</label>
-                            <input value={email} onChange={e => setEmail(e.target.value)} type='email' name='email' />
-                        </div>
-                        <div className='column'>
-                            <label>Password</label>
-                            <input value={password} onChange={e => setPassword(e.target.value)} type='password' name='password' />
-                        </div>
-                        <button onClick={onSubmit} type='submit'>
-                            Login
-                        </button>
-                        {data?.code && data.code >= 400 && data.message ? (
-                            <div className='column error-message'>An error occurred: {data.message}</div>
-                        ) : null}
-                    </div>
+                    <Card className='w-75 p-3 shadow'>
+                        <form onSubmit={onSubmit}>
+                            <InputGroup className='pb-2 d-flex flex-column'>
+                                <Label>Email</Label>
+                                <Input className='w-100' value={email} onChange={e => setEmail(e.target.value)} type='email' name='email' />
+                            </InputGroup>
+                            <InputGroup className='pb-2 d-flex flex-column'>
+                                <Label>Password</Label>
+                                <Input className='w-100' value={password} onChange={e => setPassword(e.target.value)} type='password' name='password' />
+                            </InputGroup>
+                            <div className='pt-2 w-100'>
+                                <Input type="submit" className='w-100 btn btn-outline-primary btn-block' value="Login" />
+                            </div>
+                            {data?.code && data.code >= 400 && data.message ? (
+                                <div className='column text-danger'>
+                                    An error occurred: {data.message}
+                                </div>
+                            ) : null}
+                        </form>
+                    </Card>
                 </main>
             </>
         </Layout>

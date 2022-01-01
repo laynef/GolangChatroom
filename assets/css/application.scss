@@ -1,3 +1,4 @@
+@import "~bootstrap/scss/bootstrap.scss";
 @import "layout.scss";
 @import "header.scss";
 
@@ -5,9 +6,5 @@
     width: 100vw;
     height: 100%;
     margin: 0;
-}
-
-h1 {
-    text-align: center;
 }
 

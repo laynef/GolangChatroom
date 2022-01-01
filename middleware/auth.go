@@ -27,12 +27,14 @@ func Authorize(c *gin.Context) {
 
 		if claims, ok := token.Claims.(*jwt.StandardClaims); ok && token.Valid {
 			if claims.Id != userId {
+				utils.ClearAuthCookies(c)
 				c.JSON(http.StatusUnauthorized, gin.H{
 					"message": "wrong user",
 				})
 				return
 			}
 		} else {
+			utils.ClearAuthCookies(c)
 			c.JSON(http.StatusForbidden, gin.H{
 				"message": "invalid token",
 			})
