@@ -1,6 +1,12 @@
+# github.com/cosmtrek/air v1.27.8
+## explicit; go 1.16
 # github.com/dogukanayd/gorm-pagination/pagination v0.0.0-20210507232814-154c248082aa
 ## explicit; go 1.15
 github.com/dogukanayd/gorm-pagination/pagination
+# github.com/fatih/color v1.13.0
+## explicit; go 1.13
+# github.com/fsnotify/fsnotify v1.5.1
+## explicit; go 1.13
 # github.com/gin-contrib/cors v1.3.1
 ## explicit; go 1.13
 github.com/gin-contrib/cors
@@ -27,25 +33,19 @@ github.com/go-playground/universal-translator
 # github.com/go-playground/validator/v10 v10.4.1
 ## explicit; go 1.13
 github.com/go-playground/validator/v10
-# github.com/gofrs/uuid v4.0.0+incompatible
-## explicit
 # github.com/golang-jwt/jwt v3.2.2+incompatible
 ## explicit
 github.com/golang-jwt/jwt
 # github.com/golang/protobuf v1.5.2
 ## explicit; go 1.9
 github.com/golang/protobuf/proto
-# github.com/gomodule/redigo v1.8.4
-## explicit; go 1.14
 # github.com/google/go-cmp v0.5.6
 ## explicit; go 1.8
-# github.com/googollee/go-socket.io v1.6.1
-## explicit; go 1.16
 # github.com/gorilla/websocket v1.4.2
 ## explicit; go 1.12
 github.com/gorilla/websocket
-# github.com/graarh/golang-socketio v0.0.0-20170510162725-2c44953b9b5f
-## explicit
+# github.com/imdario/mergo v0.3.12
+## explicit; go 1.13
 # github.com/jackc/chunkreader/v2 v2.0.1
 ## explicit; go 1.12
 github.com/jackc/chunkreader/v2
@@ -91,6 +91,8 @@ github.com/json-iterator/go
 # github.com/leodido/go-urn v1.2.0
 ## explicit; go 1.13
 github.com/leodido/go-urn
+# github.com/mattn/go-colorable v0.1.12
+## explicit; go 1.13
 # github.com/mattn/go-isatty v0.0.14
 ## explicit; go 1.12
 github.com/mattn/go-isatty
@@ -100,6 +102,8 @@ github.com/modern-go/concurrent
 # github.com/modern-go/reflect2 v1.0.2
 ## explicit; go 1.12
 github.com/modern-go/reflect2
+# github.com/pelletier/go-toml v1.9.4
+## explicit; go 1.12
 # github.com/rogpeppe/go-internal v1.8.1
 ## explicit; go 1.16
 # github.com/satori/go.uuid v1.2.0
