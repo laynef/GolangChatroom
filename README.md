@@ -8,6 +8,7 @@
 
 - Go with Gin Gonic, Melody, and Gorm.io
 - React.js with SASS and Bootstrap 5
+- PostgreSQL
 - Webpack Live Hot Reloading
 - Authentication with JWT
 - Websockets with Melody
