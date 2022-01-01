@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button, Card, CardBody, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { Header, Layout } from '../components/layout';
 import { ClipLoader } from "react-spinners";
-
+//@ts-ignore
 import ScrollToBottom from 'react-scroll-to-bottom';
 
 type Thread = {
@@ -56,7 +56,7 @@ export const ChatroomsPage = () => {
     }, {
         onSuccess: (res) => {
             if (res.name) {
-                setRooms([res, ...rooms])
+                setRooms([res, ...rooms]);
                 setOpen(false);
             }
         }
@@ -81,7 +81,7 @@ export const ChatroomsPage = () => {
 
     const createThread: React.FormEventHandler = (e) => { 
         e.preventDefault(); 
-        mutate({ name }) 
+        mutate({ name });
     };
 
     return (
