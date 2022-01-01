@@ -58,7 +58,7 @@ func main() {
 	})
 
 	m.HandleMessage(func(s *melody.Session, msg []byte) {
-		m.BroadcastFilter(msg, func(q *melody.Session) bool {
+		m.BroadcastBinaryFilter(msg, func(q *melody.Session) bool {
 			return q.Request.URL.Path == s.Request.URL.Path
 		})
 	})
@@ -75,5 +75,5 @@ func main() {
 		})
 	})
 
-	r.Run()
+	r.Run(":3000")
 }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
-import { Button, Card, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import { Button, Card, CardBody, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { Header, Layout } from '../components/layout';
 import { ClipLoader } from "react-spinners";
 
@@ -66,10 +66,12 @@ export const ChatroomsPage = () => {
                     <Card className='w-75 d-flex flex-column justify-content-center shadow p-3'>
                         <ClipLoader color='aqua' loading={isLoading} />
                         {Array.isArray(data?.data) && data?.data.length > 0 && data.data.map((thread: Thread, key: number) => (
-                            <Link key={key} to={`/chatrooms/${thread.id}`}>
-                                <div className='card w-100'>
-                                    {thread.name}
-                                </div>
+                            <Link className='text-primary' key={key} to={`/chatrooms/${thread.id}`}>
+                                <Card className='w-100'>
+                                    <CardBody>
+                                        {thread.name}
+                                    </CardBody>
+                                </Card>
                             </Link>
                         ))}
                         {Array.isArray(data?.data) && data.data.length === 0 && <p>No chatrooms available</p>}

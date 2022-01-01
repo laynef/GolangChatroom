@@ -3,15 +3,16 @@ import { Link } from 'react-router-dom';
 import { useLogout } from '../hooks/logout';
 
 type LayoutProps = {
+    className?: string;
 }
 
 type HeaderProps = {
     hasAuth?: boolean;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children }) => {
+export const Layout: React.FC<LayoutProps> = ({ children, ...reset }) => {
     return (
-        <div className='main-container'>
+        <div {...reset} className='main-container'>
             {children}
         </div>
     )

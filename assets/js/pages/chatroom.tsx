@@ -83,6 +83,7 @@ export const ChatroomPage = () => {
             rootMargin: "20px",
             threshold: 0
         };
+
         const observer = new IntersectionObserver(handleObserver, option);
         if (loader.current) observer.observe(loader.current);
     }, [handleObserver]);
@@ -96,8 +97,8 @@ export const ChatroomPage = () => {
             const d = JSON.parse(msg.data);
             if (d?.User?.username !== username) {
                 toast.info(`${d?.User?.username}: ${d?.text}`, { autoClose: 3000 });
+                setMessages([...messages, d]);
             }
-            setMessages([...messages, d]);
         }
 
         ws.onclose = () => toast.dismiss();
@@ -109,12 +110,13 @@ export const ChatroomPage = () => {
         return () => {
             window.removeEventListener('beforeunload', () => ws.close())
         }
-    }, [ws])
+    }, [ws]);
 
     const sendMessage: React.FormEventHandler = (e) => {
         e.preventDefault();
         mutate({ text });
         const m = createMessage({ text, username });
+        setMessages([...messages, m])
         ws.send(JSON.stringify(m));
         setText('');
     }
