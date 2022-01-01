@@ -35,8 +35,8 @@ func main() {
 	// Return html for all other routes
 	// The browser controls the HTML routing
 	r.NoRoute(func(c *gin.Context) {
-		script := utils.FindFile(".js")
-		stylesheet := utils.FindFile(".css")
+		script, _ := utils.FindFile(".js")
+		stylesheet, _ := utils.FindFile(".css")
 
 		c.HTML(http.StatusOK, "index.html", gin.H{
 			"script":     script,
