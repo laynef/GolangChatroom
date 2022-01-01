@@ -10,7 +10,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import ScrollToBottom from 'react-scroll-to-bottom';
 
 
-const createMessage = ({ username, text }: any) => ({
+const createMessage = ({ username, text, id }: any) => ({
+    id,
     text,
     User: { username },
 })
@@ -26,6 +27,7 @@ export const ChatroomPage = () => {
     const [lastPage, setLastPage] = React.useState(2);
     const [page, setPage] = React.useState(1);
     const [messages, setMessages] = React.useState([]);
+    const [messageIds, setMessageIds]: any = React.useState({});
     const [ws] = React.useState(new WebSocket(url));
     const loader = React.useRef(null);
 
@@ -43,8 +45,11 @@ export const ChatroomPage = () => {
                 toast(`Entered room: ${d.name}!`, { autoClose: 3000 });
             }
 
-            if (d?.Messages?.data?.length > 0) {
-                setMessages([...d.Messages.data, ...messages]);
+            let newData = d?.Messages?.data || [];
+            if (newData.length > 0) {
+                newData = newData.filter((ele: any) => !messageIds[ele.id]);
+                setMessages([...newData, ...messages]);
+                setMessageIds({ ...messageIds, ...newData.reduce((acc: any, ele: any) => ({ ...acc, [ele.id]: true }), {}) });
                 setPage(page + 1);
                 setLastPage(d.Messages.last_page);
             }
@@ -55,7 +60,7 @@ export const ChatroomPage = () => {
         }
     }, { retry: false, refetchOnReconnect: false });
 
-    const { mutate }: any = useMutation('thread:' + id + ':message', async (body) => {
+    const { mutateAsync }: any = useMutation('thread:' + id + ':message', async (body) => {
         try {
             const res = await fetch(`/api/v1/threads/${id}/messages`, {
                 body: JSON.stringify(body),
@@ -69,13 +74,13 @@ export const ChatroomPage = () => {
             return error;
         }
     }, {
-        onSuccess: (data) => {
-            console.log(data)
-            const m = JSON.stringify(data);
-            ws.send(m);
-            setMessages([...messages, data]);
+        onSuccess: (d) => {
+            setMessages([...messages, d]);
+            setMessageIds({ ...messageIds, [d.id]: true });
             setText('');
-        }
+            return d;
+        },
+        onSettled: d => d
     });
 
     const handleObserver = React.useCallback((entries) => {
@@ -105,9 +110,10 @@ export const ChatroomPage = () => {
             toast.dismiss();
             const d = JSON.parse(msg.data);
 
-            if (d?.User?.username !== username) {
+            if (!messageIds[d.id]) {
                 toast.info(`${d?.User?.username}: ${d?.text}`, { autoClose: 3000 });
                 setMessages([...messages, d]);
+                setMessageIds({ ...messageIds, [d.id]: true });
             }
         }
 
@@ -116,7 +122,7 @@ export const ChatroomPage = () => {
             toast.dismiss();
         }
 
-    }, [ws, setMessages, messages]);
+    }, [ws, setMessages, messages, setMessageIds, messageIds]);
 
     React.useEffect(() => {
         window.addEventListener('beforeunload', () => ws.close())
@@ -125,9 +131,11 @@ export const ChatroomPage = () => {
         }
       }, [ws])
 
-    const sendMessage: React.FormEventHandler = (e) => {
+    const sendMessage: React.FormEventHandler = async (e) => {
         e.preventDefault();
-        mutate({ text });
+        const d = await mutateAsync({ text });
+        const m = JSON.stringify(createMessage({ username, text, id: d.id }));
+        ws.send(m);
     }
 
     return (
@@ -142,7 +150,7 @@ export const ChatroomPage = () => {
                                 <ScrollToBottom id="scroll-container" behavior="auto" className='scroll-container'>
                                     <div ref={loader} />
                                     <ClipLoader color='aqua' loading={isLoading} />
-                                    {Array.isArray(messages) && messages.length > 0 && messages.map((message: any, key: number) => (
+                                    {messages.length > 0 && messages.map((message: any, key: number) => (
                                         <p key={key}>{message?.User?.username}: {message?.text}</p>
                                     ))}
                                 </ScrollToBottom>
