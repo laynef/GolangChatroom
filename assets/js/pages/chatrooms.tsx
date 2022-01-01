@@ -59,6 +59,10 @@ export const ChatroomsPage = () => {
                 setRooms([res, ...rooms]);
                 setOpen(false);
             }
+        },
+        onSettled: () => {
+            const div = document.getElementById('scroll-container');
+            div.scroll(0,0);
         }
     });
 
@@ -96,8 +100,8 @@ export const ChatroomsPage = () => {
                             +
                         </Button>
                     </div>
-                    <Card className='w-75 d-flex flex-column justify-content-center shadow p-3'>
-                        <ScrollToBottom mode='top' id="scroll-container" behavior="auto" className='scroll-container'>
+                    <ScrollToBottom mode='top' behavior="smooth" className='w-75 d-flex flex-column justify-content-center shadow p-3 '>
+                        <Card id="scroll-container" className='scroll-container'>
                             <ClipLoader color='aqua' loading={isLoading} />
                             {rooms.length > 0 && rooms.map((thread: Thread, key: number) => (
                                 <Link className='text-primary' key={key} to={`/chatrooms/${thread.id}`}>
@@ -110,8 +114,8 @@ export const ChatroomsPage = () => {
                             ))}
                             {!isLoading && rooms.length === 0 && <p>No chatrooms available</p>}
                             <div ref={loader} />
-                        </ScrollToBottom>
                     </Card>
+                    </ScrollToBottom>
                 </main>
                 <Modal fade backdrop isOpen={open} toggle={() => setOpen(false)}>
                     <form onSubmit={createThread}>
