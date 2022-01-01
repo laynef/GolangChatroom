@@ -89,7 +89,6 @@ export const ChatroomPage = () => {
 
     React.useEffect(() => {
         ws.onmessage = (msg) => {
-            console.log(msg, url)
             const socket = msg.target as WebSocket;
             if (socket.url !== url) return socket.close();
 
@@ -108,9 +107,9 @@ export const ChatroomPage = () => {
     React.useEffect(() => {
         window.addEventListener('beforeunload', () => ws.close())
         return () => {
-          window.removeEventListener('beforeunload', () => ws.close())
+            window.removeEventListener('beforeunload', () => ws.close())
         }
-      }, [ws])
+    }, [ws])
 
     const sendMessage: React.FormEventHandler = (e) => {
         e.preventDefault();
