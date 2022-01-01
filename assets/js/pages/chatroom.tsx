@@ -53,7 +53,7 @@ export const ChatroomPage = () => {
         } catch (error) {
             return error;
         }
-    }, { retry: false });
+    }, { retry: true });
 
     const { mutate }: any = useMutation('thread:' + id + ':message', async (body) => {
         try {
@@ -134,9 +134,7 @@ export const ChatroomPage = () => {
                                     <div ref={loader} />
                                     <ClipLoader color='aqua' loading={isLoading} />
                                     {Array.isArray(messages) && messages.length > 0 && messages.map((message: any, key: number) => (
-                                        <div key={key} className='w-100'>
-                                            <p>{message?.User?.username}: {message?.text}</p>
-                                        </div>
+                                        <p key={key}>{message?.User?.username}: {message?.text}</p>
                                     ))}
                                 </ScrollToBottom>
                             </CardBody>
