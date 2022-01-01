@@ -30,6 +30,7 @@ func CreateMessage(c *gin.Context) {
 	}
 
 	db.Create(&message)
-
+	db.Preload("User").First(&message, message.ID)
+	
 	c.JSON(http.StatusCreated, message)
 }

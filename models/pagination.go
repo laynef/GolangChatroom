@@ -63,7 +63,7 @@ func (c *Config) Paginate(db *gorm.DB, thread *Thread, uid uuid.UUID) (Result, *
 		messages[i], messages[j] = messages[j], messages[i]
 	}
 
-	db.Model(messages).Count(&count)
+	db.Model(&messages).Where("thread_id = ?", uid).Count(&count)
 
 	r.CurrentPage = c.Page
 	r.NextPageURL = c.GetPageURL(c.Page + 1)

@@ -5,6 +5,7 @@ import { Button, Card, CardBody, Input, InputGroup, Label, Modal, ModalBody, Mod
 import { Header, Layout } from '../components/layout';
 import { ClipLoader } from "react-spinners";
 
+import ScrollToBottom from 'react-scroll-to-bottom';
 
 type Thread = {
     id: string;
@@ -12,10 +13,28 @@ type Thread = {
 }
 
 export const ChatroomsPage = () => {
-    const { data, isLoading, refetch } = useQuery('threads', async () => {
+    const perPage = 10;
+    const [open, setOpen] = React.useState(false);
+    const [name, setName] = React.useState('');
+    const [lastPage, setLastPage] = React.useState(2);
+    const [page, setPage] = React.useState(1);
+    const [rooms, setRooms] = React.useState([]);
+    const loader = React.useRef();
+
+    const { isLoading, refetch } = useQuery('threads', async () => {
+        if (page >= lastPage) return null;
+
         try {
-            const res = await fetch("/api/v1/threads");
-            return res.json();
+            const res = await fetch(`/api/v1/threads?page=${page}&per_page=${perPage}`);
+            const d = await res.json();
+            
+            const next = d.data || [];
+
+            setRooms([...rooms, ...next]);
+            setLastPage(d.last_page);
+            setPage(page + 1);
+
+            return d;
         } catch (error) {
             return error;
         }
@@ -30,21 +49,35 @@ export const ChatroomsPage = () => {
                 },
                 body: JSON.stringify(body),
             });
-            return res.json();
+            return await res.json();
         } catch (error) {
             return error;
         }
     }, {
         onSuccess: (res) => {
             if (res.name) {
+                setRooms([res, ...rooms])
                 setOpen(false);
-                refetch();
             }
         }
     });
-    
-    const [open, setOpen] = React.useState(false);
-    const [name, setName] = React.useState('');
+
+    const handleObserver = React.useCallback((entries) => {
+        const target = entries[0];
+        if (target.isIntersecting) {
+            refetch();
+        }
+    }, []);
+
+    React.useEffect(() => {
+        const option = {
+            root: null as any,
+            rootMargin: "20px",
+            threshold: 0
+        };
+        const observer = new IntersectionObserver(handleObserver, option);
+        if (loader.current) observer.observe(loader.current);
+    }, [handleObserver]);
 
     const createThread: React.FormEventHandler = (e) => { 
         e.preventDefault(); 
@@ -64,17 +97,20 @@ export const ChatroomsPage = () => {
                         </Button>
                     </div>
                     <Card className='w-75 d-flex flex-column justify-content-center shadow p-3'>
-                        <ClipLoader color='aqua' loading={isLoading} />
-                        {Array.isArray(data?.data) && data?.data.length > 0 && data.data.map((thread: Thread, key: number) => (
-                            <Link className='text-primary' key={key} to={`/chatrooms/${thread.id}`}>
-                                <Card className='w-100'>
-                                    <CardBody>
-                                        {thread.name}
-                                    </CardBody>
-                                </Card>
-                            </Link>
-                        ))}
-                        {Array.isArray(data?.data) && data.data.length === 0 && <p>No chatrooms available</p>}
+                        <ScrollToBottom id="scroll-container" behavior="auto" className='scroll-container'>
+                            <div ref={loader} />
+                            <ClipLoader color='aqua' loading={isLoading} />
+                            {rooms.map((thread: Thread, key: number) => (
+                                <Link className='text-primary' key={key} to={`/chatrooms/${thread.id}`}>
+                                    <Card className='w-100'>
+                                        <CardBody>
+                                            {thread.name}
+                                        </CardBody>
+                                    </Card>
+                                </Link>
+                            ))}
+                            {!isLoading && rooms.length === 0 && <p>No chatrooms available</p>}
+                        </ScrollToBottom>
                     </Card>
                 </main>
                 <Modal fade backdrop isOpen={open} toggle={() => setOpen(false)}>

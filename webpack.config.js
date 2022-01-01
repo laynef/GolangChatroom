@@ -37,7 +37,7 @@ const configurator = {
 
   plugins() {
     var plugins = [
-      new MiniCssExtractPlugin({filename: "[name].[hash].css"}),
+      new MiniCssExtractPlugin({filename: "[name].[fullhash].css"}),
       new CopyWebpackPlugin({
         patterns: [{
           from: "./assets",
@@ -95,7 +95,7 @@ const configurator = {
       mode: env,
       entry: configurator.entries(),
       output: {
-        filename: "[name].[hash].js", 
+        filename: "[name].[fullhash].js", 
         path: `${__dirname}/public/assets`,
         clean: true,
       },

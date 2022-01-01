@@ -23,7 +23,7 @@ export const ChatroomPage = () => {
     const username = getCookie('username');
     const [text, setText] = React.useState('');
     const [roomName, setRoomName] = React.useState(null);
-    const [lastPage, setLastPage] = React.useState(1);
+    const [lastPage, setLastPage] = React.useState(2);
     const [page, setPage] = React.useState(1);
     const [messages, setMessages] = React.useState([]);
     const [ws] = React.useState(new WebSocket(url));
@@ -32,7 +32,7 @@ export const ChatroomPage = () => {
     const fetchMessagesUrl = `/api/v1/threads/${id}?page=${page}&per_page=${perPage}`;
 
     const { isLoading, refetch } = useQuery('chatroom:' + id, async () => {
-        if (page > lastPage) return null;
+        if (page >= lastPage) return null;
 
         try {
             const res = await fetch(fetchMessagesUrl);
@@ -43,17 +43,17 @@ export const ChatroomPage = () => {
                 toast(`Entered room: ${d.name}!`, { autoClose: 3000 });
             }
 
-            if (d?.Messages?.data?.length && page <= d.Messages.last_page) {
+            if (d?.Messages?.data?.length > 0) {
                 setMessages([...d.Messages.data, ...messages]);
                 setPage(page + 1);
                 setLastPage(d.Messages.last_page);
             }
 
-            return d;
+            return null;
         } catch (error) {
             return error;
         }
-    }, { retry: false });
+    }, { retry: false, refetchOnReconnect: false });
 
     const { mutate }: any = useMutation('thread:' + id + ':message', async (body) => {
         try {
@@ -64,9 +64,17 @@ export const ChatroomPage = () => {
                 },
                 method: 'POST',
             });
-            return res.json();
+            return await res.json();
         } catch (error) {
             return error;
+        }
+    }, {
+        onSuccess: (data) => {
+            console.log(data)
+            const m = JSON.stringify(data);
+            ws.send(m);
+            setMessages([...messages, data]);
+            setText('');
         }
     });
 
@@ -88,7 +96,7 @@ export const ChatroomPage = () => {
     }, [handleObserver]);
 
     React.useEffect(() => {
-        ws.onopen = () => console.log('websocket connected!');
+        ws.onopen = () => console.info('websocket connected!');
 
         ws.onmessage = (msg) => {
             const socket = msg.target as WebSocket;
@@ -103,7 +111,10 @@ export const ChatroomPage = () => {
             }
         }
 
-        ws.onclose = () => toast.dismiss();
+        ws.onclose = () => {
+            console.info('websocket closed!');
+            toast.dismiss();
+        }
 
     }, [ws, setMessages, messages]);
 
@@ -117,10 +128,6 @@ export const ChatroomPage = () => {
     const sendMessage: React.FormEventHandler = (e) => {
         e.preventDefault();
         mutate({ text });
-        const m = createMessage({ text, username });
-        ws.send(JSON.stringify(m));
-        setMessages([...messages, m])
-        setText('');
     }
 
     return (
