@@ -16,13 +16,13 @@ export const ChatroomsPage = () => {
     const perPage = 10;
     const [open, setOpen] = React.useState(false);
     const [name, setName] = React.useState('');
-    const [lastPage, setLastPage] = React.useState(2);
+    const [lastPage, setLastPage] = React.useState(1);
     const [page, setPage] = React.useState(1);
     const [rooms, setRooms] = React.useState([]);
-    const loader = React.useRef();
+    const loader = React.useRef(null);
 
     const { isLoading, refetch } = useQuery('threads', async () => {
-        if (page >= lastPage) return null;
+        if (page > lastPage) return null;
 
         try {
             const res = await fetch(`/api/v1/threads?page=${page}&per_page=${perPage}`);
@@ -97,10 +97,9 @@ export const ChatroomsPage = () => {
                         </Button>
                     </div>
                     <Card className='w-75 d-flex flex-column justify-content-center shadow p-3'>
-                        <ScrollToBottom id="scroll-container" behavior="auto" className='scroll-container'>
-                            <div ref={loader} />
+                        <ScrollToBottom mode='top' id="scroll-container" behavior="auto" className='scroll-container'>
                             <ClipLoader color='aqua' loading={isLoading} />
-                            {rooms.map((thread: Thread, key: number) => (
+                            {rooms.length > 0 && rooms.map((thread: Thread, key: number) => (
                                 <Link className='text-primary' key={key} to={`/chatrooms/${thread.id}`}>
                                     <Card className='w-100'>
                                         <CardBody>
@@ -110,6 +109,7 @@ export const ChatroomsPage = () => {
                                 </Link>
                             ))}
                             {!isLoading && rooms.length === 0 && <p>No chatrooms available</p>}
+                            <div ref={loader} />
                         </ScrollToBottom>
                     </Card>
                 </main>
