@@ -4,6 +4,7 @@
 
 - PostgreSQL 14
 - Node version >= 16
+- Yarn >= 1.22.17
 - Go >= 1.17.5
 
 ## Setup
@@ -14,5 +15,5 @@
 4. `$ go build`
 5. `$ yarn install`
 6. `yarn build`
-7. `go run main.go`
-
+7. `air`
+8. Listen to port 3000
