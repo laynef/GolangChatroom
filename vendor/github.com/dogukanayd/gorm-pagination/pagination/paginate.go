@@ -2,8 +2,10 @@ package pagination
 
 import (
 	"fmt"
-	"gorm.io/gorm"
+	"math"
 	"os"
+
+	"gorm.io/gorm"
 )
 
 // Result ..
@@ -73,7 +75,8 @@ func (c *Config) Paginate(db *gorm.DB, any interface{}) (Result, *gorm.DB) {
 
 // GetLastPage ..
 func (r *Result) GetLastPage() int {
-	return int(r.Total) / r.PerPage
+	page := float64(r.Total) / float64(r.PerPage)
+	return int(math.Ceil(page))
 }
 
 func (c *Config) GetPageURL(page int) string {
