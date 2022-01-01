@@ -91,19 +91,16 @@ export const ChatroomPage = () => {
         ws.onopen = () => console.log('websocket connected!');
 
         ws.onmessage = (msg) => {
-            console.log(msg, url)
             const socket = msg.target as WebSocket;
             if (socket.url !== url) return socket.close();
 
             toast.dismiss();
             const d = JSON.parse(msg.data);
 
-            console.log(d)
-
             if (d?.User?.username !== username) {
                 toast.info(`${d?.User?.username}: ${d?.text}`, { autoClose: 3000 });
+                setMessages([...messages, d]);
             }
-            setMessages([...messages, d]);
         }
 
         ws.onclose = () => toast.dismiss();
