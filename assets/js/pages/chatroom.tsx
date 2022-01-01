@@ -53,7 +53,7 @@ export const ChatroomPage = () => {
         } catch (error) {
             return error;
         }
-    }, { retry: true });
+    }, { retry: false });
 
     const { mutate }: any = useMutation('thread:' + id + ':message', async (body) => {
         try {
@@ -83,22 +83,27 @@ export const ChatroomPage = () => {
             rootMargin: "20px",
             threshold: 0
         };
-
         const observer = new IntersectionObserver(handleObserver, option);
         if (loader.current) observer.observe(loader.current);
     }, [handleObserver]);
 
     React.useEffect(() => {
+        ws.onopen = () => console.log('websocket connected!');
+
         ws.onmessage = (msg) => {
+            console.log(msg, url)
             const socket = msg.target as WebSocket;
             if (socket.url !== url) return socket.close();
 
             toast.dismiss();
             const d = JSON.parse(msg.data);
+
+            console.log(d)
+
             if (d?.User?.username !== username) {
                 toast.info(`${d?.User?.username}: ${d?.text}`, { autoClose: 3000 });
-                setMessages([...messages, d]);
             }
+            setMessages([...messages, d]);
         }
 
         ws.onclose = () => toast.dismiss();
@@ -108,16 +113,16 @@ export const ChatroomPage = () => {
     React.useEffect(() => {
         window.addEventListener('beforeunload', () => ws.close())
         return () => {
-            window.removeEventListener('beforeunload', () => ws.close())
+          window.removeEventListener('beforeunload', () => ws.close())
         }
-    }, [ws]);
+      }, [ws])
 
     const sendMessage: React.FormEventHandler = (e) => {
         e.preventDefault();
         mutate({ text });
         const m = createMessage({ text, username });
-        setMessages([...messages, m])
         ws.send(JSON.stringify(m));
+        setMessages([...messages, m])
         setText('');
     }
 
