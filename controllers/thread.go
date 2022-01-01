@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/dogukanayd/gorm-pagination/pagination"
 	"github.com/gin-gonic/gin"
 	"github.com/laynefaler/chatroom/models"
 	uuid "github.com/satori/go.uuid"
@@ -20,7 +19,7 @@ func ListThreads(c *gin.Context) {
 	perPage, _ := strconv.Atoi(c.DefaultQuery("per_page", "10"))
 
 	var threads []models.Thread
-	p, _ := (&pagination.Config{
+	p, _ := (&models.Config{
 		Page:    page,
 		PerPage: perPage,
 		Path:    c.Request.URL.Path,
@@ -49,7 +48,7 @@ func ShowThread(c *gin.Context) {
 		PerPage: perPage,
 		Path:    c.Request.URL.Path,
 		Sort:    "created_at desc",
-	}).Paginate(db, &thread, uid)
+	}).ThreadShowPaginate(db, &thread, uid)
 
 	showThread := models.ThreadShow{
 		Messages: p,

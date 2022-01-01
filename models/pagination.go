@@ -42,7 +42,40 @@ type Config struct {
 }
 
 // Paginate ..
-func (c *Config) Paginate(db *gorm.DB, thread *Thread, uid uuid.UUID) (Result, *gorm.DB) {
+func (c *Config) Paginate(db *gorm.DB, any interface{}) (Result, *gorm.DB) {
+	var r Result
+	var count int64
+
+	offset := (c.Page - 1) * c.PerPage
+	lastIndex := offset * c.Page
+	d := db.Offset(offset).Limit(c.PerPage)
+
+	if c.Sort != "" {
+		d.Order(c.Sort)
+	}
+
+	d.Find(any)
+
+	db.Model(any).Count(&count)
+
+	r.CurrentPage = c.Page
+	r.NextPageURL = c.GetPageURL(c.Page + 1)
+	r.FirstPageURL = c.GetPageURL(1)
+	r.PrevPageURL = c.PreviousPageURL()
+	r.PerPage = c.PerPage
+	r.Path = c.Path
+	r.To = lastIndex
+	r.From = lastIndex - offset
+	r.Total = count
+	r.Data = any
+	r.LastPageURL = c.GetPageURL(r.GetLastPage())
+	r.LastPage = r.GetLastPage()
+
+	return r, d
+}
+
+// Paginate ..
+func (c *Config) ThreadShowPaginate(db *gorm.DB, thread *Thread, uid uuid.UUID) (Result, *gorm.DB) {
 	var r Result
 	var count int64
 
