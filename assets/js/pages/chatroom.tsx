@@ -144,14 +144,20 @@ export const ChatroomPage = () => {
                 <Header hasAuth />
                 <main>
                     <h1>{roomName}</h1>
-                    <Card className='w-75 shadow'>
-                        <Form onSubmit={sendMessage} method='none' action={null}>
-                            <CardBody className='d-flex flex-column'>
-                                <ScrollToBottom id="scroll-container" behavior="auto" className='scroll-container'>
+                    <Card className='w-75 shadow chat-body'>
+                        <Form className='w-100' onSubmit={sendMessage} method='none' action={null}>
+                            <CardBody className='d-flex flex-column w-100'>
+                                <ScrollToBottom id="scroll-container" behavior="auto" scrollViewClassName='no-x-overflow' className='scroll-container'>
                                     <div ref={loader} />
                                     <ClipLoader color='aqua' loading={isLoading} />
                                     {messages.length > 0 && messages.map((message: any, key: number) => (
-                                        <p key={key}>{message?.User?.username}: {message?.text}</p>
+                                        <div className={`w-100 d-flex flex-row justify-content-${
+                                            message?.User?.username === username ? 'end' : 'start'
+                                        }`} key={key}>
+                                            <p className={
+                                                message?.User?.username === username ? 'send' : 'receive'
+                                            }>{message?.User?.username}: {message?.text}</p>
+                                        </div>
                                     ))}
                                 </ScrollToBottom>
                             </CardBody>

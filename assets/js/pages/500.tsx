@@ -1,13 +1,20 @@
 import * as React from 'react';
 import { Header, Layout } from '../components/layout';
+import { Typewriter } from 'react-simple-typewriter';
 
 export const InternalErrorPage = () => {
     return (
-        <Layout>
+        <Layout className='main-container'>
             <>
                 <Header />
-                <main>
-                    <h1>500: We are experiencing technical issues!</h1>
+                <main className='homepage'>
+                    <Typewriter
+                        words={['500: Our bad!']}
+                        loop={Infinity}
+                        typeSpeed={70}
+                        deleteSpeed={50}
+                        delaySpeed={1000}
+                    />
                 </main>
             </>
         </Layout>

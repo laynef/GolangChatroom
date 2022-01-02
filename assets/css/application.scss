@@ -1,7 +1,10 @@
+$info: rgb(169, 224, 253);
+
 @import "~bootstrap/scss/bootstrap.scss";
 @import "layout.scss";
 @import "header.scss";
 @import "scroll.scss";
+@import "chat.scss";
 
 #app, body, html {
     width: 100vw;

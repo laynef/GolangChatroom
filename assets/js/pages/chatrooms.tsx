@@ -96,16 +96,18 @@ export const ChatroomsPage = () => {
                     <div className='d-flex w-75 align-items-center flex-row justify-content-between'>
                         <div />
                         <h1>Chatrooms</h1>
-                        <Button outline color='primary' onClick={() => setOpen(true)} className='rounded-circle'>
-                            +
-                        </Button>
+                        <div className='d-flex flex-row align-items-center justify-content-center' style={{ width: 50, height: 50 }}>
+                            <Button  className='rounded-circle text-white d-flex flex-column align-items-center justify-content-center' style={{ width: 35, height: 35 }} color='info' onClick={() => setOpen(true)}>
+                                &#43;
+                            </Button>
+                        </div>
                     </div>
                     <ScrollToBottom mode='top' behavior="smooth" className='w-75 card d-flex flex-column justify-content-center shadow p-3 '>
                         <div id="scroll-container" className='scroll-container'>
                             <ClipLoader color='aqua' loading={isLoading} />
                             {rooms.length > 0 && rooms.map((thread: Thread, key: number) => (
-                                <Link className='text-primary' key={key} to={`/chatrooms/${thread.id}`}>
-                                    <Card className='w-100'>
+                                <Link className='text-dark text-decoration-none' key={key} to={`/chatrooms/${thread.id}`}>
+                                    <Card className='w-100 chatroom-card'>
                                         <CardBody>
                                             {thread.name}
                                         </CardBody>
