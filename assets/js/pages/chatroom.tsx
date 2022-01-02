@@ -154,16 +154,21 @@ export const ChatroomPage = () => {
                                         <div className={`w-100 d-flex flex-row justify-content-${
                                             message?.User?.username === username ? 'end' : 'start'
                                         }`} key={key}>
-                                            <p className={
-                                                message?.User?.username === username ? 'send' : 'receive'
-                                            }>{message?.User?.username}: {message?.text}</p>
+                                            <div className={`d-flex flex-column align-items-${
+                                            message?.User?.username === username ? 'end' : 'start'
+                                        }`}>
+                                                {message?.User?.username !== username && <span style={{ fontSize: 12, color: 'grey' }}>{message?.User?.username}</span>}
+                                                <p className={
+                                                    message?.User?.username === username ? 'send' : 'receive'
+                                                }>{message?.text}</p>
+                                            </div>
                                         </div>
                                     ))}
                                 </ScrollToBottom>
                             </CardBody>
                             <CardFooter>
                                 <Input placeholder='Enter message' value={text} onChange={e => setText(e.target.value)} className='w-100' />
-                                <Input type='submit' className='btn btn-block btn-primary' value="Send" />
+                                <Input type='submit' hidden className='btn btn-block btn-primary' value="Send" />
                             </CardFooter>
                         </Form>
                     </Card>
