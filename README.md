@@ -1,8 +1,12 @@
 # Go Live Chatrooms
 
+An example project demonstrating websockets and authentication using Golang and React.js with Typescript.
+
 ## Preview
 
-<img src="./docs/demo.gif" alt="">
+<video width="99%" height="540" autoplay loop muted>
+    <source src="./docs/demo.mp4" type="video/mp4">
+</video>
 
 ## Features
 
