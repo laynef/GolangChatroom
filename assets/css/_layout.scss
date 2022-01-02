@@ -23,3 +23,16 @@ main {
     font-family: 'Licorice', cursive;
     justify-content: center;
 }
+
+h1 {
+    font-family: 'Licorice', cursive;
+    font-weight: 600;
+    font-size: 3rem;
+}
+
+.chatroom-card {
+    &:hover {
+        background-color: rgb(169, 224, 253);
+        color: white;
+    }
+}
