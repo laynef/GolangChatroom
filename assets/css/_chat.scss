@@ -1,4 +1,4 @@
-@use postcss-nested;
+@use "postcss-nested";
 
 :root {
   --send-bg: #0B93F6;
@@ -31,8 +31,8 @@ p {
   &:before, &:after {
     content: "";
 		position: absolute;
-    bottom: 0;
-    height: 25px;
+        bottom: 0;
+        height: 25px;
   }
 }
 

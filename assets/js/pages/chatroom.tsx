@@ -154,9 +154,9 @@ export const ChatroomPage = () => {
                                         <div className={`w-100 d-flex flex-row justify-content-${
                                             message?.User?.username === username ? 'end' : 'start'
                                         }`} key={key}>
-                                        <p className={
-                                            message?.User?.username === username ? 'send' : 'receive'
-                                        }>{message?.User?.username}: {message?.text}</p>
+                                            <p className={
+                                                message?.User?.username === username ? 'send' : 'receive'
+                                            }>{message?.User?.username}: {message?.text}</p>
                                         </div>
                                     ))}
                                 </ScrollToBottom>
