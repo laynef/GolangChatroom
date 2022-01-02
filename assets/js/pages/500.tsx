@@ -9,7 +9,7 @@ export const InternalErrorPage = () => {
                 <Header />
                 <main className='homepage'>
                     <Typewriter
-                        words={['500: We are experiencing a technical issue!']}
+                        words={['500: Our bad!']}
                         loop={Infinity}
                         typeSpeed={70}
                         deleteSpeed={50}
