@@ -1,4 +1,10 @@
 .scroll-container {
     height: 400px;
+    width: 100%;
     overflow: auto;
+    overflow-x: hidden !important;
+}
+
+.no-x-overflow {
+    overflow-x: hidden !important;
 }
