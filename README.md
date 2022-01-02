@@ -4,9 +4,8 @@ An example project demonstrating websockets and authentication using Golang and 
 
 ## Preview
 
-<video width="99%" height="540" autoplay loop muted>
-    <source src="./docs/demo.mp4" type="video/mp4">
-</video>
+[![Watch the video](https://img.youtube.com/vi/VtCIdvlczQA/maxresdefault.jpg)](https://youtu.be/VtCIdvlczQA)
+
 
 ## Features
 
