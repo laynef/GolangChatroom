@@ -1,13 +1,10 @@
 import * as React from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { Card, CardBody, CardFooter, Form, Input } from 'reactstrap';
 import { Header, Layout } from '../components/layout';
 import { getCookie } from '../utils/auth';
-import { ClipLoader } from "react-spinners";
 import { ToastContainer, toast } from 'react-toastify';
-// @ts-ignore
-import ScrollToBottom from 'react-scroll-to-bottom';
+import { ChatBox } from '../components/chatbox';
 
 
 const createMessage = ({ username, text, id }: any) => ({
@@ -29,7 +26,6 @@ export const ChatroomPage = () => {
     const [messages, setMessages] = React.useState([]);
     const [messageIds, setMessageIds]: any = React.useState({});
     const [ws] = React.useState(new WebSocket(url));
-    const loader = React.useRef(null);
 
     const fetchMessagesUrl = `/api/v1/threads/${id}?page=${page}&per_page=${perPage}`;
 
@@ -83,23 +79,6 @@ export const ChatroomPage = () => {
         onSettled: d => d
     });
 
-    const handleObserver = React.useCallback((entries) => {
-        const target = entries[0];
-        if (target.isIntersecting) {
-            refetch();
-        }
-    }, []);
-
-    React.useEffect(() => {
-        const option = {
-            root: null as any,
-            rootMargin: "20px",
-            threshold: 0
-        };
-        const observer = new IntersectionObserver(handleObserver, option);
-        if (loader.current) observer.observe(loader.current);
-    }, [handleObserver]);
-
     React.useEffect(() => {
         ws.onopen = () => console.info('websocket connected!');
 
@@ -144,34 +123,28 @@ export const ChatroomPage = () => {
                 <Header hasAuth />
                 <main>
                     <h1>{roomName}</h1>
-                    <Card className='w-75 shadow chat-body'>
-                        <Form className='w-100' onSubmit={sendMessage} method='none' action={null}>
-                            <CardBody className='d-flex flex-column w-100'>
-                                <ScrollToBottom id="scroll-container" behavior="auto" scrollViewClassName='no-x-overflow' className='scroll-container'>
-                                    <div ref={loader} />
-                                    <ClipLoader color='aqua' loading={isLoading} />
-                                    {messages.length > 0 && messages.map((message: any, key: number) => (
-                                        <div className={`w-100 d-flex flex-row justify-content-${
-                                            message?.User?.username === username ? 'end' : 'start'
-                                        }`} key={key}>
-                                            <div className={`d-flex flex-column align-items-${
-                                            message?.User?.username === username ? 'end' : 'start'
-                                        }`}>
-                                                {message?.User?.username !== username && <span style={{ fontSize: 12, color: 'grey' }}>{message?.User?.username}</span>}
-                                                <p className={
-                                                    message?.User?.username === username ? 'send' : 'receive'
-                                                }>{message?.text}</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </ScrollToBottom>
-                            </CardBody>
-                            <CardFooter>
-                                <Input placeholder='Enter message' value={text} onChange={e => setText(e.target.value)} className='w-100' />
-                                <Input type='submit' hidden className='btn btn-block btn-primary' value="Send" />
-                            </CardFooter>
-                        </Form>
-                    </Card>
+                    <ChatBox
+                        refetch={refetch}
+                        sendMessage={sendMessage}
+                        isLoading={isLoading}
+                        text={text}
+                        setText={(e: any) => setText(e.target.value)}
+                    >
+                        {messages.length > 0 && messages.map((message: any, key: number) => (
+                            <div className={`w-100 d-flex flex-row justify-content-${
+                                message?.User?.username === username ? 'end' : 'start'
+                            }`} key={key}>
+                                <div className={`d-flex flex-column align-items-${
+                                message?.User?.username === username ? 'end' : 'start'
+                            }`}>
+                                    {message?.User?.username !== username && <span style={{ fontSize: 12, color: 'grey' }}>{message?.User?.username}</span>}
+                                    <p className={
+                                        message?.User?.username === username ? 'send' : 'receive'
+                                    }>{message?.text}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </ChatBox>
                 </main>
                 <ToastContainer pauseOnFocusLoss={false} />
             </>
