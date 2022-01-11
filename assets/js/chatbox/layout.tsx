@@ -4,7 +4,7 @@ import { ClipLoader } from "react-spinners";
 // @ts-ignore
 import ScrollToBottom from 'react-scroll-to-bottom';
 
-export const ChatBox = ({
+export const ChatBoxLayout = ({
     children,
     sendMessage,
     isLoading,

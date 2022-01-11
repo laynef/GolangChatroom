@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Header, Layout } from '../components/layout';
 import { getCookie } from '../utils/auth';
 import { ToastContainer, toast } from 'react-toastify';
-import { ChatBox } from '../components/chatbox';
+import { ChatBoxLayout } from '../chatbox/layout';
 
 
 const createMessage = ({ username, text, id }: any) => ({
@@ -123,7 +123,7 @@ export const ChatroomPage = () => {
                 <Header hasAuth />
                 <main>
                     <h1>{roomName}</h1>
-                    <ChatBox
+                    <ChatBoxLayout
                         refetch={refetch}
                         sendMessage={sendMessage}
                         isLoading={isLoading}
@@ -144,7 +144,7 @@ export const ChatroomPage = () => {
                                 </div>
                             </div>
                         ))}
-                    </ChatBox>
+                    </ChatBoxLayout>
                 </main>
                 <ToastContainer pauseOnFocusLoss={false} />
             </>
