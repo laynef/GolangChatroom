@@ -50,6 +50,12 @@ func main() {
 	auth.DELETE("/threads/:threadId", controllers.DestroyThread)
 	// Authorized Messages
 	auth.POST("/threads/:threadId/messages", controllers.CreateMessage)
+	// Authorized Blogs
+	auth.GET("/blogs", controllers.ListBlogs)
+	auth.GET("/blogs/:blogId", controllers.ShowBlog)
+	auth.POST("/blogs", controllers.CreateBlog)
+	auth.PUT("/blogs/:blogId", controllers.UpdateBlog)
+	auth.DELETE("/blogs/:blogId", controllers.DestroyBlog)
 	// Serve public assets
 	r.Use(static.Serve("/public", static.LocalFile("./public", true)))
 

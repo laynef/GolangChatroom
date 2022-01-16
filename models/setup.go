@@ -36,6 +36,7 @@ func SetupModels() *gorm.DB {
 		&User{},
 		&Thread{},
 		&Message{},
+		&Blog{},
 	)
 
 	return db
