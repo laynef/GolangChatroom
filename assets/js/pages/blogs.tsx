@@ -7,10 +7,11 @@ import { ClipLoader } from "react-spinners";
 //@ts-ignore
 import ScrollToBottom from 'react-scroll-to-bottom';
 
-type Thread = {
+type Blog = {
     id: string;
     text: string;
     title: string;
+    image_url: string;
 }
 
 export const BlogsPage = () => {
@@ -18,7 +19,7 @@ export const BlogsPage = () => {
     const [open, setOpen] = React.useState(false);
     const [title, setTitle] = React.useState('');
     const [text, setText] = React.useState('');
-    const [imageUrl, setImageUrl] = React.useState('');
+    const [image_url, setImageUrl] = React.useState('');
     const [lastPage, setLastPage] = React.useState(1);
     const [page, setPage] = React.useState(1);
     const [blogs, setBlogs] = React.useState([]);
@@ -88,7 +89,7 @@ export const BlogsPage = () => {
 
     const createBlog: React.FormEventHandler = (e) => { 
         e.preventDefault(); 
-        mutate({ title, text, image_url: imageUrl });
+        mutate({ title, text, image_url });
     };
 
     return (
@@ -100,7 +101,7 @@ export const BlogsPage = () => {
                         <div />
                         <h1>Blogs</h1>
                         <div className='d-flex flex-row align-items-center justify-content-center' style={{ width: 50, height: 50 }}>
-                            <Button  className='rounded-circle text-white d-flex flex-column align-items-center justify-content-center' style={{ width: 35, height: 35 }} color='info' onClick={() => setOpen(true)}>
+                            <Button  className='rounded-circle text-white d-flex flex-column align-items-center justify-content-center' style={{ width: 35, height: 35 }} color='danger' onClick={() => setOpen(true)}>
                                 &#43;
                             </Button>
                         </div>
@@ -108,7 +109,7 @@ export const BlogsPage = () => {
                     <ScrollToBottom mode='top' behavior="smooth" className='w-75 card d-flex flex-column justify-content-center shadow p-3 '>
                         <div id="scroll-container" className='scroll-container'>
                             <ClipLoader color='aqua' loading={isLoading} />
-                            {blogs.length > 0 && blogs.map((blog: Thread, key: number) => (
+                            {blogs.length > 0 && blogs.map((blog: Blog, key: number) => (
                                 <Link className='text-dark text-decoration-none' key={key} to={`/blogs/${blog.id}`}>
                                     <Card className='w-100 chatroom-card'>
                                         <CardBody>
@@ -125,7 +126,7 @@ export const BlogsPage = () => {
                 <Modal fade backdrop isOpen={open} toggle={() => setOpen(false)}>
                     <form onSubmit={createBlog}>
                         <ModalHeader toggle={() => setOpen(false)}>
-                            Create Chatroom
+                            Create Blog
                         </ModalHeader>
                         <ModalBody>
                             <InputGroup className='d-flex flex-column w-100'>
@@ -138,7 +139,7 @@ export const BlogsPage = () => {
                             </InputGroup>
                             <InputGroup className='d-flex flex-column w-100'>
                                 <Label>Image Url</Label>
-                                <Input placeholder='Enter image url' className='w-100' value={imageUrl} onChange={e => setImageUrl(e.target.value)} type='text' name='image_url' />
+                                <Input placeholder='Enter image url' className='w-100' value={image_url} onChange={e => setImageUrl(e.target.value)} type='text' name='image_url' />
                             </InputGroup>
                             {blogData?.code && blogData.code >= 400 && blogData.message ? (
                                 <div className='column text-danger'>
@@ -150,7 +151,7 @@ export const BlogsPage = () => {
 
                         <div>
                             <Input
-                                className="btn btn-primary"
+                                className="btn btn-danger"
                                 value="Create"
                                 type='submit'
                             />

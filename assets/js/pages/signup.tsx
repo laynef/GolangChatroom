@@ -46,7 +46,7 @@ export const SignUpPage = () => {
                                 <Input className='w-100' value={password_confirmation} onChange={e => setPasswordConfirmation(e.target.value)} type='password' name='password_confirmation' />
                             </InputGroup>
                             <div className='pt-2 w-100'>
-                                <Button type='submit' block outline color='primary' className='w-100'>
+                                <Button type='submit' block outline color='danger' className='w-100'>
                                     Sign Up
                                 </Button>
                             </div>

@@ -97,7 +97,7 @@ export const ChatroomsPage = () => {
                         <div />
                         <h1>Chatrooms</h1>
                         <div className='d-flex flex-row align-items-center justify-content-center' style={{ width: 50, height: 50 }}>
-                            <Button  className='rounded-circle text-white d-flex flex-column align-items-center justify-content-center' style={{ width: 35, height: 35 }} color='info' onClick={() => setOpen(true)}>
+                            <Button  className='rounded-circle text-white d-flex flex-column align-items-center justify-content-center' style={{ width: 35, height: 35 }} color='danger' onClick={() => setOpen(true)}>
                                 &#43;
                             </Button>
                         </div>
@@ -139,7 +139,7 @@ export const ChatroomsPage = () => {
 
                         <div>
                             <Input
-                                className="btn btn-primary"
+                                className="btn btn-danger"
                                 value="Create"
                                 type='submit'
                             />

@@ -34,7 +34,7 @@ export const LoginPage = () => {
                                 <Input className='w-100' value={password} onChange={e => setPassword(e.target.value)} type='password' name='password' />
                             </InputGroup>
                             <div className='pt-2 w-100'>
-                                <Input type="submit" className='w-100 btn btn-outline-primary btn-block' value="Login" />
+                                <Input type="submit" className='w-100 btn btn-outline-danger btn-block' value="Login" />
                             </div>
                             {data?.code && data.code >= 400 && data.message ? (
                                 <div className='column text-danger'>
