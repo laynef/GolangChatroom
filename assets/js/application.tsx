@@ -13,6 +13,9 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { ChatroomPage } from "./pages/chatroom";
 import { RequireAuth } from "./utils/auth";
+import { BlogsPage } from "./pages/blogs";
+import { BlogPage } from "./pages/blog";
+import { DashboardPage } from "./pages/dashboard";
 
 const App = () => {
     const queryClient = new QueryClient();
@@ -24,6 +27,11 @@ const App = () => {
                     <Route path="/" element={<HomePage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/signup" element={<SignUpPage />} />
+                    <Route path="/dashboard" element={
+                        <RequireAuth>
+                            <DashboardPage />
+                        </RequireAuth>
+                    } />
                     <Route path="/chatrooms" element={
                         <RequireAuth>
                             <ChatroomsPage />
@@ -32,6 +40,16 @@ const App = () => {
                     <Route path="/chatrooms/:id" element={
                         <RequireAuth>
                             <ChatroomPage />
+                        </RequireAuth>
+                    } />
+                    <Route path="/blogs" element={
+                        <RequireAuth>
+                            <BlogsPage />
+                        </RequireAuth>
+                    } />
+                    <Route path="/blogs/:id" element={
+                        <RequireAuth>
+                            <BlogPage />
                         </RequireAuth>
                     } />
                     <Route path="/internal_server_error" element={<InternalErrorPage />} />

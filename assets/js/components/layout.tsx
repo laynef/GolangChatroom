@@ -29,7 +29,9 @@ export const Header: React.FC<HeaderProps> = ({ hasAuth }) => {
         <header>
             {hasAuth && (
                 <div className='header-left'>
-                    <Link to='/chatrooms'>Home</Link>
+                    <Link to='/dashboard'>Home</Link>
+                    <Link to='/blogs'>Blogs</Link>
+                    <Link to='/chatrooms'>Chatroom</Link>
                 </div>
             )}
             {!hasAuth && (
