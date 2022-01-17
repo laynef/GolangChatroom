@@ -36,7 +36,7 @@ func ShowBlog(c *gin.Context) {
 
 	blogId, _ := c.Params.Get("blogId")
 
-	blog := db.First(blogId)
+	blog := db.Preload("User").First(blogId)
 
 	c.JSON(http.StatusOK, blog)
 }
@@ -54,10 +54,10 @@ func CreateBlog(c *gin.Context) {
 	id, _ := uuid.FromString(userId)
 
 	blog := models.Blog{
-		Title:   body.Title,
-		Text:   body.Text,
-		ImageUrl:   body.ImageUrl,
-		UserID: id,
+		Title:    body.Title,
+		Text:     body.Text,
+		ImageUrl: body.ImageUrl,
+		UserID:   id,
 	}
 
 	db.Create(&blog)

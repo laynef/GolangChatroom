@@ -20,6 +20,7 @@ type User struct {
 	DeletedAt            gorm.DeletedAt `json:"deleted_at" gorm:"index"`
 	Threads              []Thread
 	Messages             []Message
+	Blogs                []Blog
 }
 
 func (u *User) BeforeCreate(scope *gorm.DB) (err error) {

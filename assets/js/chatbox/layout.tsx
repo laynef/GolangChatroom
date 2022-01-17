@@ -37,7 +37,7 @@ export const ChatBoxLayout = ({
                 <CardBody className='d-flex flex-column w-100'>
                     <ScrollToBottom id="scroll-container" behavior="auto" scrollViewClassName='no-x-overflow' className='scroll-container'>
                         <div ref={loader} />
-                        <ClipLoader color='aqua' loading={isLoading} />
+                        <ClipLoader color='#dc3545' loading={isLoading} />
                         {children}
                     </ScrollToBottom>
                 </CardBody>

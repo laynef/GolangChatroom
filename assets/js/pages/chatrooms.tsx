@@ -104,7 +104,7 @@ export const ChatroomsPage = () => {
                     </div>
                     <ScrollToBottom mode='top' behavior="smooth" className='w-75 card d-flex flex-column justify-content-center shadow p-3 '>
                         <div id="scroll-container" className='scroll-container'>
-                            <ClipLoader color='aqua' loading={isLoading} />
+                            <ClipLoader color='#dc3545' loading={isLoading} />
                             {rooms.length > 0 && rooms.map((thread: Thread, key: number) => (
                                 <Link className='text-dark text-decoration-none' key={key} to={`/chatrooms/${thread.id}`}>
                                     <Card className='w-100 chatroom-card'>

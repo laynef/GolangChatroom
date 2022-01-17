@@ -108,7 +108,7 @@ export const BlogsPage = () => {
                     </div>
                     <ScrollToBottom mode='top' behavior="smooth" className='w-75 card d-flex flex-column justify-content-center shadow p-3 '>
                         <div id="scroll-container" className='scroll-container'>
-                            <ClipLoader color='aqua' loading={isLoading} />
+                            <ClipLoader color='#dc3545' loading={isLoading} />
                             {blogs.length > 0 && blogs.map((blog: Blog, key: number) => (
                                 <Link className='text-dark text-decoration-none' key={key} to={`/blogs/${blog.id}`}>
                                     <Card className='w-100 chatroom-card'>
