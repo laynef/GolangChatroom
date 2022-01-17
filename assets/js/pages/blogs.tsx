@@ -1,11 +1,54 @@
 import * as React from 'react';
 import { useMutation, useQuery } from 'react-query';
-import { Link } from 'react-router-dom';
-import { Button, Card, CardBody, CardHeader, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import { Button, Card, CardBody, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { Header, Layout } from '../components/layout';
 import { ClipLoader } from "react-spinners";
 //@ts-ignore
 import ScrollToBottom from 'react-scroll-to-bottom';
+import { Editor, EditorChangeEvent, EditorTools } from "@progress/kendo-react-editor";
+import { Link as A } from 'react-router-dom';
+const {
+    Bold,
+    Italic,
+    Underline,
+    Strikethrough,
+    Subscript,
+    Superscript,
+    ForeColor,
+    BackColor,
+    CleanFormatting,
+    AlignLeft,
+    AlignCenter,
+    AlignRight,
+    AlignJustify,
+    Indent,
+    Outdent,
+    OrderedList,
+    UnorderedList,
+    Undo,
+    Redo,
+    FontSize,
+    FontName,
+    FormatBlock,
+    Link,
+    Unlink,
+    InsertImage,
+    ViewHtml,
+    InsertTable,
+    InsertFile,
+    SelectAll,
+    Print,
+    Pdf,
+    AddRowBefore,
+    AddRowAfter,
+    AddColumnBefore,
+    AddColumnAfter,
+    DeleteRow,
+    DeleteColumn,
+    DeleteTable,
+    MergeCells,
+    SplitCell
+  } = EditorTools;
 
 type Blog = {
     id: string;
@@ -110,20 +153,20 @@ export const BlogsPage = () => {
                         <div id="scroll-container" className='scroll-container'>
                             <ClipLoader color='#dc3545' loading={isLoading} />
                             {blogs.length > 0 && blogs.map((blog: Blog, key: number) => (
-                                <Link className='text-dark text-decoration-none' key={key} to={`/blogs/${blog.id}`}>
+                                <A className='text-dark text-decoration-none' key={key} to={`/blogs/${blog.id}`}>
                                     <Card className='w-100 chatroom-card'>
                                         <CardBody>
                                             {blog.title}
                                         </CardBody>
                                     </Card>
-                                </Link>
+                                </A>
                             ))}
                             {!isLoading && blogs.length === 0 && <p>No blogs available</p>}
                             <div ref={loader} />
                     </div>
                     </ScrollToBottom>
                 </main>
-                <Modal fade backdrop isOpen={open} toggle={() => setOpen(false)}>
+                <Modal size='md' fade backdrop isOpen={open} toggle={() => setOpen(false)}>
                     <form onSubmit={createBlog}>
                         <ModalHeader toggle={() => setOpen(false)}>
                             Create Blog
@@ -134,12 +177,19 @@ export const BlogsPage = () => {
                                 <Input placeholder='Enter title' className='w-100' value={title} onChange={e => setTitle(e.target.value)} type='text' name='title' />
                             </InputGroup>
                             <InputGroup className='d-flex flex-column w-100'>
-                                <Label>Text</Label>
-                                <textarea value={text} placeholder='Enter text' className='w-100' onChange={e => setText(e.target.value)} name='text' />
-                            </InputGroup>
-                            <InputGroup className='d-flex flex-column w-100'>
                                 <Label>Image Url</Label>
                                 <Input placeholder='Enter image url' className='w-100' value={image_url} onChange={e => setImageUrl(e.target.value)} type='text' name='image_url' />
+                            </InputGroup>
+                            <InputGroup className='d-flex flex-column w-100'>
+                                <Label>Body</Label>
+                                <Editor
+                                    tools={[[Bold, Italic, Underline, Strikethrough], [Subscript, Superscript], ForeColor, BackColor, [CleanFormatting], [AlignLeft, AlignCenter, AlignRight, AlignJustify], [Indent, Outdent], [OrderedList, UnorderedList], FontSize, FontName, FormatBlock, [SelectAll], [Undo, Redo], [Link, Unlink, InsertImage, ViewHtml], [InsertTable, InsertFile], [Pdf, Print], [AddRowBefore, AddRowAfter, AddColumnBefore, AddColumnAfter], [DeleteRow, DeleteColumn, DeleteTable], [MergeCells, SplitCell]]}
+                                    contentStyle={{
+                                        height: 200,
+                                    }}
+                                    defaultContent={''}
+                                    onChange={(e: EditorChangeEvent) => setText(e.html)}
+                                />
                             </InputGroup>
                             {blogData?.code && blogData.code >= 400 && blogData.message ? (
                                 <div className='column text-danger'>

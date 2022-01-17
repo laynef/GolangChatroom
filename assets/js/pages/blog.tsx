@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
+import { Card, CardBody } from 'reactstrap';
 import { Header, Layout } from '../components/layout';
 
 
@@ -36,6 +37,11 @@ export const BlogPage = () => {
     return (
         <Container>
             <h1>{data?.title}</h1>
+            <Card className='w-100 chatroom-card'>
+                <CardBody>
+                    <div dangerouslySetInnerHTML={data?.text || ''} />
+                </CardBody>
+            </Card>
         </Container>
     )
 };
