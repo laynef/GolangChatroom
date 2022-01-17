@@ -189,6 +189,7 @@ export const BlogsPage = () => {
                                     }}
                                     defaultContent={''}
                                     onChange={(e: EditorChangeEvent) => setText(e.html)}
+                                    value={text}
                                 />
                             </InputGroup>
                             {blogData?.code && blogData.code >= 400 && blogData.message ? (

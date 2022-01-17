@@ -35,8 +35,10 @@ func ShowBlog(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
 	blogId, _ := c.Params.Get("blogId")
+	id, _ := uuid.FromString(blogId)
 
-	blog := db.Preload("User").First(blogId)
+	var blog models.Blog
+	db.Preload("User").First(&blog, id)
 
 	c.JSON(http.StatusOK, blog)
 }

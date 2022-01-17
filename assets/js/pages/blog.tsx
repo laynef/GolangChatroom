@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
-import { Card, CardBody } from 'reactstrap';
+import { Card, CardBody, CardHeader } from 'reactstrap';
 import { Header, Layout } from '../components/layout';
 
 
@@ -19,7 +19,7 @@ const Container: React.FC = ({ children }) => (
 
 export const BlogPage = () => {
     const { id } = useParams();
-    const { isLoading, data } = useQuery('threads', async () => {
+    const { isLoading, data } = useQuery(`blogs:${id}`, async () => {
         try {
             const res = await fetch(`/api/v1/blogs/${id}`);
             return await res.json();
@@ -37,9 +37,12 @@ export const BlogPage = () => {
     return (
         <Container>
             <h1>{data?.title}</h1>
-            <Card className='w-100 chatroom-card'>
+            <Card className='w-75 card shadow'>
+                <CardHeader>
+                    <img className='w-100' src={data?.image_url} alt="" />
+                </CardHeader>
                 <CardBody>
-                    <div dangerouslySetInnerHTML={data?.text || ''} />
+                    <div id='scroll-container' className='scroll-container d-flex flex-column' dangerouslySetInnerHTML={{ __html: data?.text || '' }} />
                 </CardBody>
             </Card>
         </Container>
