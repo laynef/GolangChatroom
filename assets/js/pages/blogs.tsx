@@ -102,7 +102,7 @@ export const BlogsPage = () => {
         }
     }, {
         onSuccess: (res) => {
-            if (res.name) {
+            if (res.title) {
                 setBlogs([res, ...blogs]);
                 setOpen(false);
             }
