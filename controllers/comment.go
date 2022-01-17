@@ -3,7 +3,6 @@ package controllers
 import (
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/laynefaler/chatroom/models"
@@ -11,7 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func ListBlogs(c *gin.Context) {
+func ListComments(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
 
 	db := c.MustGet("db").(*gorm.DB)
@@ -19,18 +18,23 @@ func ListBlogs(c *gin.Context) {
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 	perPage, _ := strconv.Atoi(c.DefaultQuery("per_page", "10"))
 
-	var blogs []models.Blog
+	blogId, _ := c.Params.Get("blogId")
+	id, _ := uuid.FromString(blogId)
+
+	var comments []models.Comment
+	db.Model("Comment").Where("blog_id = ?", id).Find(&comments)
+
 	p, _ := (&models.Config{
 		Page:    page,
 		PerPage: perPage,
 		Path:    c.Request.URL.Path,
 		Sort:    "created_at desc",
-	}).Paginate(db, &blogs)
+	}).Paginate(db, &comments)
 
 	c.JSON(http.StatusOK, p)
 }
 
-func ShowBlog(c *gin.Context) {
+func ShowComment(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
 
 	db := c.MustGet("db").(*gorm.DB)
@@ -38,30 +42,31 @@ func ShowBlog(c *gin.Context) {
 	blogId, _ := c.Params.Get("blogId")
 	id, _ := uuid.FromString(blogId)
 
-	var blog models.Blog
+	var blog models.Comment
 	db.Preload("User").Preload("Comments").First(&blog, id)
 
 	c.JSON(http.StatusOK, blog)
 }
 
-func CreateBlog(c *gin.Context) {
+func CreateComment(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
 
 	db := c.MustGet("db").(*gorm.DB)
 
 	userId, _ := c.Cookie("current_user_id")
 
-	var body models.Blog
+	blogId, _ := c.Params.Get("blogId")
+	uid, _ := uuid.FromString(blogId)
+
+	var body models.Comment
 	c.BindJSON(&body)
 
 	id, _ := uuid.FromString(userId)
 
-	blog := models.Blog{
-		Title:    body.Title,
-		Text:     body.Text,
-		Html:     body.Html,
-		ImageUrl: body.ImageUrl,
-		UserID:   id,
+	blog := models.Comment{
+		Text:   body.Text,
+		UserID: id,
+		BlogID: uid,
 	}
 
 	db.Create(&blog)
@@ -69,35 +74,28 @@ func CreateBlog(c *gin.Context) {
 	c.JSON(http.StatusCreated, blog)
 }
 
-func UpdateBlog(c *gin.Context) {
+func UpdateComment(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
 
 	db := c.MustGet("db").(*gorm.DB)
 
-	var body models.Blog
+	var body models.Comment
 	c.BindJSON(&body)
 
 	blogId, _ := c.Params.Get("blogId")
 	blog := db.First(blogId)
-
-	db.Model(&blog).Updates(models.Blog{
-		Title:     body.Title,
-		Text:      body.Text,
-		Html:      body.Html,
-		ImageUrl:  body.ImageUrl,
-		UpdatedAt: time.Now(),
-	})
+	db.Model(&blog).Update("text", body.Text)
 
 	c.JSON(http.StatusOK, blog)
 }
 
-func DestroyBlog(c *gin.Context) {
+func DestroyComment(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
 
 	db := c.MustGet("db").(*gorm.DB)
 
 	blogId, _ := c.Params.Get("blogId")
-	db.Delete(&models.Blog{}, blogId)
+	db.Delete(&models.Comment{}, blogId)
 
 	c.JSON(http.StatusNoContent, nil)
 }

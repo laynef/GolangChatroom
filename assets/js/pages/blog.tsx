@@ -64,6 +64,7 @@ export const BlogPage = () => {
     const [open, setOpen] = React.useState(false);
     const [title, setTitle] = React.useState('');
     const [text, setText] = React.useState('');
+    const [html, setHtml] = React.useState('');
     const [image_url, setImageUrl] = React.useState('');
 
     const { isLoading, data } = useQuery(`blogs:${id}`, async () => {
@@ -73,6 +74,7 @@ export const BlogPage = () => {
 
             setTitle(d.title);
             setText(d.text);
+            setHtml(d.html);
             setImageUrl(d.image_url);
 
             return d;
@@ -83,7 +85,7 @@ export const BlogPage = () => {
 
     const { mutate, data: blogData }: any = useMutation('updateBlogs', async (body) => {
         try {
-            const res = await fetch("/api/v1/blogs", {
+            const res = await fetch(`/api/v1/blogs/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -96,13 +98,8 @@ export const BlogPage = () => {
         }
     }, {
         onSuccess: (res) => {
-            console.log(res)
-            if (res.title) {
-                setTitle(res.title);
-                setText(res.text);
-                setImageUrl(res.image_url);
-                setOpen(false);
-            }
+            console.log(res);
+            setOpen(false);
         }
     });
 
@@ -114,7 +111,7 @@ export const BlogPage = () => {
 
     const updateBlog: React.FormEventHandler = (e) => { 
         e.preventDefault(); 
-        mutate({ title, text, image_url });
+        mutate({ title, text, image_url, html });
     };
 
     return (
@@ -133,7 +130,7 @@ export const BlogPage = () => {
                     <img className='w-100' src={data?.image_url} alt="" />
                 </CardHeader>
                 <CardBody>
-                    <div id='scroll-container' className='scroll-container d-flex flex-column' dangerouslySetInnerHTML={{ __html: data?.text || '' }} />
+                    <div id='scroll-container' className='scroll-container d-flex flex-column' dangerouslySetInnerHTML={{ __html: data?.html || '' }} />
                 </CardBody>
             </Card>
             <Modal size='md' fade backdrop isOpen={open} toggle={() => setOpen(false)}>
@@ -158,8 +155,8 @@ export const BlogPage = () => {
                                     height: 200,
                                 }}
                                 defaultContent={''}
-                                onChange={(e: EditorChangeEvent) => setText(e.html)}
-                                value={text}
+                                onChange={(e: EditorChangeEvent) => { setHtml(e.html); setText(e.value.textContent); }}
+                                value={html}
                             />
                         </InputGroup>
                         {blogData?.code && blogData.code >= 400 && blogData.message ? (

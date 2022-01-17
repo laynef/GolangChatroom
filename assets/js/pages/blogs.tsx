@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { useMutation, useQuery } from 'react-query';
-import { Button, Card, CardBody, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import { Button, Card, CardBody, CardHeader, Input, InputGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { Header, Layout } from '../components/layout';
 import { ClipLoader } from "react-spinners";
+//@ts-ignore
+import Masonry, {ResponsiveMasonry} from "react-responsive-masonry";
 //@ts-ignore
 import ScrollToBottom from 'react-scroll-to-bottom';
 import { Editor, EditorChangeEvent, EditorTools } from "@progress/kendo-react-editor";
@@ -61,7 +63,8 @@ export const BlogsPage = () => {
     const perPage = 10;
     const [open, setOpen] = React.useState(false);
     const [title, setTitle] = React.useState('');
-    const [text, setText] = React.useState('');
+    const [text, setText] = React.useState(null);
+    const [html, setHtml] = React.useState('');
     const [image_url, setImageUrl] = React.useState('');
     const [lastPage, setLastPage] = React.useState(1);
     const [page, setPage] = React.useState(1);
@@ -132,7 +135,7 @@ export const BlogsPage = () => {
 
     const createBlog: React.FormEventHandler = (e) => { 
         e.preventDefault(); 
-        mutate({ title, text, image_url });
+        mutate({ title, text, image_url, html });
     };
 
     return (
@@ -149,20 +152,28 @@ export const BlogsPage = () => {
                             </Button>
                         </div>
                     </div>
-                    <ScrollToBottom mode='top' behavior="smooth" className='w-75 card d-flex flex-column justify-content-center shadow p-3 '>
+                    <ScrollToBottom mode='top' behavior="smooth" className='w-75 d-flex flex-column justify-content-center p-3'>
                         <div id="scroll-container" className='scroll-container'>
                             <ClipLoader color='#dc3545' loading={isLoading} />
-                            {blogs.length > 0 && blogs.map((blog: Blog, key: number) => (
-                                <A className='text-dark text-decoration-none' key={key} to={`/blogs/${blog.id}`}>
-                                    <Card className='w-100 chatroom-card'>
-                                        <CardBody>
-                                            {blog.title}
-                                        </CardBody>
-                                    </Card>
-                                </A>
-                            ))}
-                            {!isLoading && blogs.length === 0 && <p>No blogs available</p>}
-                            <div ref={loader} />
+                            <ResponsiveMasonry columnsCountBreakPoints={{350: 1, 750: 2, 900: 3}}>
+                            <Masonry>
+                                {blogs.length > 0 && blogs.map((blog: Blog, key: number) => (
+                                    <A className='text-dark text-decoration-none' key={key} to={`/blogs/${blog.id}`}>
+                                        <Card className='w-100 blog-card'>
+                                            <CardHeader className='p-0 m-0'>
+                                                <img className='card-image' src={blog.image_url} alt="" />
+                                            </CardHeader>
+                                            <CardBody>
+                                                <h4 className='blog-title'>{blog.title}</h4>
+                                                <p className='blog-body'>{blog.text}</p>
+                                            </CardBody>
+                                        </Card>
+                                    </A>
+                                ))}
+                            </Masonry>
+                        </ResponsiveMasonry>
+                        {!isLoading && blogs.length === 0 && <p className='text-center'>No blogs available</p>}
+                        <div ref={loader} />
                     </div>
                     </ScrollToBottom>
                 </main>
@@ -188,8 +199,8 @@ export const BlogsPage = () => {
                                         height: 200,
                                     }}
                                     defaultContent={''}
-                                    onChange={(e: EditorChangeEvent) => setText(e.html)}
-                                    value={text}
+                                    onChange={(e: EditorChangeEvent) => { setHtml(e.html); setText(e.value.textContent); }}
+                                    value={html}
                                 />
                             </InputGroup>
                             {blogData?.code && blogData.code >= 400 && blogData.message ? (
@@ -199,18 +210,17 @@ export const BlogsPage = () => {
                             ) : null}
                         </ModalBody>
                         <ModalFooter>
-
-                        <div>
-                            <Input
-                                className="btn btn-danger"
-                                value="Create"
-                                type='submit'
-                            />
-                        </div>
-                        {' '}
-                        <Button outline onClick={() => setOpen(false)}>
-                            Cancel
-                        </Button>
+                            <div>
+                                <Input
+                                    className="btn btn-danger"
+                                    value="Create"
+                                    type='submit'
+                                />
+                            </div>
+                            {' '}
+                            <Button outline onClick={() => setOpen(false)}>
+                                Cancel
+                            </Button>
                         </ModalFooter>
                     </form>
                 </Modal>

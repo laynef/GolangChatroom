@@ -56,6 +56,12 @@ func main() {
 	auth.POST("/blogs", controllers.CreateBlog)
 	auth.PUT("/blogs/:blogId", controllers.UpdateBlog)
 	auth.DELETE("/blogs/:blogId", controllers.DestroyBlog)
+	// Authorized Blogs
+	auth.GET("/blogs/:blogId/comments", controllers.ListBlogs)
+	auth.GET("/blogs/:blogId/comments/:commentId", controllers.ShowBlog)
+	auth.POST("/blogs/:blogId/comments", controllers.CreateBlog)
+	auth.PUT("/blogs/:blogId/comments", controllers.UpdateBlog)
+	auth.DELETE("/blogs/:blogId/comments/:commentId", controllers.DestroyBlog)
 	// Serve public assets
 	r.Use(static.Serve("/public", static.LocalFile("./public", true)))
 
